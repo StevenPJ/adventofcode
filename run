@@ -1,5 +1,16 @@
 #!/bin/sh
 
-./gradlew build --build-cache
+./gradlew build shadowJar --build-cache
 
-java -jar build/libs/adventofcode-1.0-SNAPSHOT-all.jar "$@"
+for i in $(seq 31 $END); do
+  FILE="inputs/2022/day$i.txt"
+  if test -f "$FILE"; then
+      continue
+  fi
+  currentDay=$(date +'%_d')
+  if [ "$i" -le "$currentDay" ]; then
+     aocd $i 2022 > $FILE
+  fi
+done
+
+java -jar -DINPUT_DIR="$(realpath inputs)" solutions/build/libs/solutions-1.0-SNAPSHOT-all.jar "$@"
