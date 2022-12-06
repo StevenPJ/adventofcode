@@ -16,6 +16,7 @@ class TimerTest {
         timer.start();
         Thread.sleep(50);
         var fiftyMillis = timer.elapsed();
+        timer.start();
         Thread.sleep(10);
         var tenMillis = timer.elapsed();
 

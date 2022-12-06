@@ -19,13 +19,25 @@ public abstract class Solution implements Comparable<Solution> {
 
     @SneakyThrows
     public Object part1() {
+        return part1(getInput());
+    }
+
+    @SneakyThrows
+    public Object part2() {
+        return part2(getInput());
+    }
+
+    @SneakyThrows
+    private String getInput() {
         var inputDir = System.getProperty("INPUT_DIR");
         var inputFile = new File(inputDir + String.format("/%d/day%d.txt", year, day));
-        var input = FileUtils.readFileToString(inputFile, "UTF-8");
-        return part1(input);
+        return FileUtils.readFileToString(inputFile, "UTF-8");
     }
 
     protected Object part1(String input) {
+        throw new UnsupportedOperationException();
+    }
+    protected Object part2(String input) {
         throw new UnsupportedOperationException();
     }
 

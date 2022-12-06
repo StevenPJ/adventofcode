@@ -12,11 +12,19 @@ class Runner {
     public void runSolutions(Selector which) {
         which.solutions().forEach( solution -> {
             display.print(format("----- %d, Day %d -----", solution.year(), solution.day()));
-            timer.start();
             try {
-                display.print(format("%4dms Part 1: %s", timer.elapsed().toMillis(), solution.part1()));
+                timer.start();
+                var answer = solution.part1();
+                display.print(format("%4dms Part 1: %s", timer.elapsed().toMillis(), answer));
             } catch (UnsupportedOperationException ex) {
                 display.print(format("%4dms Part 1: %s", 0, "unsolved"));
+            }
+            try {
+                timer.start();
+                var answer = solution.part2();
+                display.print(format("%4dms Part 2: %s", timer.elapsed().toMillis(), answer));
+            } catch (UnsupportedOperationException ex) {
+                display.print(format("%4dms Part 2: %s", 0, "unneeded"));
             }
         });
     }

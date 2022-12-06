@@ -2,6 +2,8 @@
 
 ./gradlew build shadowJar --build-cache
 
+# pip3 install advent-of-code-data
+
 for i in $(seq 31 $END); do
   FILE="inputs/2022/day$i.txt"
   if test -f "$FILE"; then

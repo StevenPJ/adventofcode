@@ -8,9 +8,7 @@ class Timer {
     Instant start;
 
     public Duration elapsed() {
-        var start = this.start;
-        start();
-        return Duration.between(start, Instant.now());
+        return Duration.between(this.start, Instant.now());
     }
 
     public void start() {
