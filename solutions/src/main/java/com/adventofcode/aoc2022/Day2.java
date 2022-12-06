@@ -8,9 +8,6 @@ import java.util.stream.Stream;
 
 public class Day2 extends Solution {
 
-    public Day2() {
-        super(2022, 2);
-    }
     @Override
     public Object part1(String input) {
         var matchScores = Map.of(

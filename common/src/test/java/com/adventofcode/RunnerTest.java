@@ -62,8 +62,14 @@ class RunnerTest {
 
     static class IncompleteSolution extends Solution {
 
-        public IncompleteSolution() {
-            super(1992, 1);
+        @Override
+        public int year() {
+            return 1992;
+        }
+
+        @Override
+        public int day() {
+            return 1;
         }
 
         @Override
@@ -79,10 +85,6 @@ class RunnerTest {
 
     static class CompleteSolution extends Solution {
 
-        public CompleteSolution() {
-            super(1992, 10);
-        }
-
         @Override
         public Object part1() {
             return 100;
@@ -91,6 +93,16 @@ class RunnerTest {
         @Override
         public Object part2() {
             return "table";
+        }
+
+        @Override
+        public int year() {
+            return 1992;
+        }
+
+        @Override
+        public int day() {
+            return 10;
         }
     }
 

@@ -15,12 +15,8 @@ import java.util.stream.Stream;
 
 public class Day3 extends Solution {
 
-    public Day3() {
-        super(2022, 3);
-    }
-
     List<String> priorities = Arrays.asList(
-        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+        "-", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
         "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
     );
 
@@ -33,7 +29,7 @@ public class Day3 extends Solution {
                     for (int i=0; i<mid; i++) {
                         String itemUnderTest = String.valueOf(parts[0].charAt(i));
                         if (parts[1].contains(itemUnderTest))
-                            return priorities.indexOf(itemUnderTest) + 1;
+                            return priorities.indexOf(itemUnderTest);
                     }
                     return 0;
                 })
@@ -51,7 +47,7 @@ public class Day3 extends Solution {
             bagItems1.retainAll(bagItems2);
             bagItems1.retainAll(bagItems3);
             for (int item : bagItems1) {
-                total += priorities.indexOf(String.valueOf((char) item)) + 1;
+                total += priorities.indexOf(String.valueOf((char) item));
             }
         }
         return total;

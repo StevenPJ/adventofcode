@@ -17,8 +17,14 @@ class SolutionTest {
 
     static class TestSolution extends Solution {
 
-        public TestSolution() {
-            super(10, 2);
+        @Override
+        public int year() {
+            return 10;
+        }
+
+        @Override
+        public int day() {
+            return 2;
         }
 
         @Override

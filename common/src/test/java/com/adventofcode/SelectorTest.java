@@ -45,26 +45,51 @@ class SelectorTest {
     }
 
     static class FirstSolution extends Solution {
-        public FirstSolution() {
-            super(0, 1);
+
+        @Override
+        public int year() {
+            return 0;
+        }
+
+        @Override
+        public int day() {
+            return 1;
         }
     }
 
     static class SecondSolution extends Solution {
-        public SecondSolution() {
-            super(0, 2);
+        @Override
+        public int year() {
+            return 0;
+        }
+
+        @Override
+        public int day() {
+            return 2;
         }
     }
 
     static class DuplicateSecondSolution extends Solution {
-        public DuplicateSecondSolution() {
-            super(0, 2);
+        @Override
+        public int year() {
+            return 0;
+        }
+
+        @Override
+        public int day() {
+            return 2;
         }
     }
 
     static class LatestSolution extends Solution {
-        public LatestSolution() {
-            super(4000, 2);
+        @Override
+        public int year() {
+            return 4000;
+        }
+
+        @Override
+        public int day() {
+            return 2;
         }
     }
 

@@ -8,15 +8,6 @@ import java.io.File;
 
 @EqualsAndHashCode
 public abstract class Solution implements Comparable<Solution> {
-    private final int year;
-
-    private final int day;
-
-    public Solution(int year, int day) {
-        this.year = year;
-        this.day = day;
-    }
-
     @SneakyThrows
     public Object part1() {
         return part1(getInput());
@@ -30,7 +21,7 @@ public abstract class Solution implements Comparable<Solution> {
     @SneakyThrows
     private String getInput() {
         var inputDir = System.getProperty("INPUT_DIR");
-        var inputFile = new File(inputDir + String.format("/%d/day%d.txt", year, day));
+        var inputFile = new File(inputDir + String.format("/%d/day%d.txt", year(), day()));
         return FileUtils.readFileToString(inputFile, "UTF-8");
     }
 
@@ -42,22 +33,22 @@ public abstract class Solution implements Comparable<Solution> {
     }
 
     public int year() {
-        return this.year;
+        return Integer.valueOf(this.getClass().getPackageName().replace("com.adventofcode.aoc", ""));
     }
 
     public int day() {
-        return this.day;
+        return Integer.valueOf(this.getClass().getSimpleName().replace("Day", ""));
     }
 
     public boolean matches(int year, int day) {
-        return this.year == year && this.day == day;
+        return this.year() == year && this.day() == day;
     }
 
     @Override
     public int compareTo(Solution other) {
-        if (this.year != other.year) {
-            return Integer.compare(this.year, other.year);
+        if (this.year() != other.year()) {
+            return Integer.compare(this.year(), other.year());
         }
-        return Integer.compare(this.day, other.day);
+        return Integer.compare(this.day(), other.day());
     }
 }

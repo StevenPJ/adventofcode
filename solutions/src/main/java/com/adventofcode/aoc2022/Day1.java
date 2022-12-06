@@ -8,10 +8,6 @@ import java.util.stream.Stream;
 
 public class Day1 extends Solution {
 
-    public Day1() {
-        super(2022, 1);
-    }
-
     @Override
     public Object part1(String input) {
         return Stream.of(input.split("\n\n"))
