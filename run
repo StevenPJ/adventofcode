@@ -1,0 +1,5 @@
+#!/bin/sh
+
+./gradlew build --build-cache
+
+java -jar build/libs/adventofcode-1.0-SNAPSHOT-all.jar "$@"
