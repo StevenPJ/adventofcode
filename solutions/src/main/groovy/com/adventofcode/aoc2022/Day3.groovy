@@ -13,12 +13,10 @@ class Day3 extends Solution {
     @Override
     def part1(String input) {
         def rucksackCompartments = input.tokenize().collect{ [ it[0..it.length()/2], it[it.length()/2..-1] ]}
-        rucksackCompartments.collect{compartments ->
-            for (int i=0; i<compartments[0].length(); i++) {
-                def itemUnderTest = compartments[0].charAt(i) as String
-                if ( compartments[1].contains itemUnderTest )
-                    return priorities.indexOf(itemUnderTest)
-            }
+        rucksackCompartments.collect{compartments -> compartments[0].toCharArray()
+                .find{compartments[1].contains(it as String)}
+                .collect{ priorities.indexOf(it as String)}
+                .sum()
         }.sum()
     }
 
