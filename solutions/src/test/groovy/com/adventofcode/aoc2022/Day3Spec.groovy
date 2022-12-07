@@ -4,29 +4,24 @@ import spock.lang.Specification
 
 class Day3Spec extends Specification {
 
-    def "part 1 example"() {
-
-        expect:
-        new Day3().part1('''\
+    def example = '''\
         vJrwpWtwJgWrhcsFMMfFFhFp
         jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
         PmmdzqPrVvPwwTWBwg
         wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
         ttgJtRGJQctTZtZT
         CrZsJsPPZsGzwwsLwLmpwMDw
-        '''.stripIndent()) == 157
+        '''.stripIndent()
+
+    def "part 1 example"() {
+
+        expect:
+        new Day3().part1(example) == 157
     }
 
     def "part 2 example"() {
 
         expect:
-        new Day3().part2('''\
-        vJrwpWtwJgWrhcsFMMfFFhFp
-        jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
-        PmmdzqPrVvPwwTWBwg
-        wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
-        ttgJtRGJQctTZtZT
-        CrZsJsPPZsGzwwsLwLmpwMDw
-        '''.stripIndent()) == 70
+        new Day3().part2(example) == 70
     }
 }
