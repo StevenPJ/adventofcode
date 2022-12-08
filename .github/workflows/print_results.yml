@@ -17,7 +17,10 @@ jobs:
       - uses: gradle/gradle-build-action@v2
       - shell: bash
         run: |
-          ./run all > README.md
+          ./gradlew build shadowJar --build-cache
+          echo '```' > README.md
+          java -jar -DINPUT_DIR="$(realpath inputs)" solutions/build/libs/solutions-1.0-SNAPSHOT-all.jar all >> README.md
+          echo '```' >> README.md 
           git config --global user.email "spalmerjones@gmail.com"
           git config --global user.name "Github Actions"
           git add .
