@@ -18,7 +18,7 @@ jobs:
       - shell: bash
         run: |
           ./gradlew build shadowJar --build-cache
-          echo `## Solutions` > README.md
+          echo '## Solutions' > README.md
           echo '```' >> README.md
           java -jar -DINPUT_DIR="$(realpath inputs)" solutions/build/libs/solutions-1.0-SNAPSHOT-all.jar all >> README.md
           echo '```' >> README.md 
