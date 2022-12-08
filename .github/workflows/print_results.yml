@@ -18,7 +18,7 @@ jobs:
       - shell: bash
         run: |
           ./run all > README.md
-          git config --global user.email "spalmerjones@gmail.com
+          git config --global user.email "spalmerjones@gmail.com"
           git config --global user.name "Github Actions"
           git add .
           git commit -m "update README"
