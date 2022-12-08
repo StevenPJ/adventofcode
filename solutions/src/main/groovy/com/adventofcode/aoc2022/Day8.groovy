@@ -24,8 +24,7 @@ class Day8 extends Solution {
     }
 
     static getGridViewingAngles(String input) {
-        def leftToRight = input.tokenize()
-                .collect { it.collect { new Tree(Integer.valueOf(it)) } }
+        def leftToRight = input.tokenize().collect { it.collect { new Tree(Integer.valueOf(it)) } }
         def rightToLeft = leftToRight.collect { it.reverse() }
         def topDown = leftToRight.transpose() as List<List<Tree>>
         def bottomUp = topDown.collect { it.reverse() }
@@ -36,8 +35,8 @@ class Day8 extends Solution {
         lines.findAll { it.contains(tree) }
                 .collect {
                     def candidates = it.drop(it.indexOf(tree) + 1)
-                    def lastVisibleTreeIndex = candidates.findIndexOf { it.height >= tree.height }
-                    return lastVisibleTreeIndex < 0 ? candidates.size() : lastVisibleTreeIndex + 1
+                    def blockingTreeIndex = candidates.findIndexOf { it.height >= tree.height }
+                    return blockingTreeIndex < 0 ? candidates.size() : blockingTreeIndex + 1
                 }.inject(1, { a, b -> a * b })
     }
 
