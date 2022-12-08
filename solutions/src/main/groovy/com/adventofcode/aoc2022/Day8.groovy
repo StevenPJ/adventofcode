@@ -37,12 +37,12 @@ class Day8 extends Solution {
                     def candidates = it.drop(it.indexOf(tree) + 1)
                     def blockingTreeIndex = candidates.findIndexOf { it.height >= tree.height }
                     return blockingTreeIndex < 0 ? candidates.size() : blockingTreeIndex + 1
-                }.inject(1, { a, b -> a * b })
+                }.inject(1) { a, b -> a * b }
     }
 
     static getVisible(List<Tree> row) {
         row.inject([], { visible, tree ->
-            tree.isTallerThan(visible) ? visible + tree : visible
+            tree.height > visible.height.max() ? visible + tree : visible
         })
     }
 
@@ -51,11 +51,6 @@ class Day8 extends Solution {
 
         Tree(int height) {
             this.height = height
-        }
-
-        boolean isTallerThan(List<Tree> trees) {
-            return trees.isEmpty()
-                    || height > trees.collect { it.height }.max()
         }
     }
 }
