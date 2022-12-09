@@ -9,17 +9,17 @@ class Day9 extends Solution {
     def part1(String input) {
         def rope = getRope(2)
         def moves = getMoves(input)
-        return getTailPositionAfter(rope, moves).size()
+        return getTailPositionsAfter(rope, moves).size()
     }
 
     @Override
     def part2(String input) {
         def rope = getRope(10)
         def moves = getMoves(input)
-        return getTailPositionAfter(rope, moves).size()
+        return getTailPositionsAfter(rope, moves).size()
     }
 
-    static getTailPositionAfter(Knot rope, List<Vector> moves) {
+    static getTailPositionsAfter(Knot rope, List<Vector> moves) {
         def tailPositions = []
         moves.each {
             rope.move(it)
