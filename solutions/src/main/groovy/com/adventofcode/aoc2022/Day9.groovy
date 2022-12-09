@@ -87,10 +87,6 @@ class Vector {
         return this.x == other.x && this.y == other.y
     }
 
-    Vector multiply(int number) {
-        return new Vector(x * number, y * number)
-    }
-
     Vector plus(Vector other) {
         return new Vector(x + other.x, y + other.y)
     }
