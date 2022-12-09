@@ -68,8 +68,10 @@ class Knot {
 
     void move(Vector direction) {
         position += direction
-        if (next != null && position.isNotAdjacentTo(next.position)) {
-            next.move(next.position.directionTowards(position))
+        if (next != null) {
+            def difference = position - next.position
+            if (difference.magnitude() > 1)
+                next.move(difference.normalize())
         }
     }
 }
@@ -91,17 +93,17 @@ class Vector {
         return new Vector(x + other.x, y + other.y)
     }
 
-    Vector directionTowards(Vector other) {
-        if (other == this)
-            return new Vector(0, 0)
-        if (x == other.x)
-            return new Vector(0, other.y > y ? 1 : -1)
-        if (y == other.y)
-            return new Vector(other.x > x ? 1 : -1, 0)
-        return new Vector(other.x > x ? 1 : -1, other.y > y ? 1 : -1)
+    Vector minus(Vector other) {
+        return new Vector(x - other.x, y - other.y)
     }
 
-    boolean isNotAdjacentTo(Vector other) {
-        return Math.abs(this.x - other.x) > 1 || Math.abs(this.y - other.y) > 1
+    int magnitude() {
+        return Math.sqrt(this.x*this.x + this.y*this.y)
+    }
+
+    Vector normalize() {
+        def newX = this.x == 0 ? 0 : this.x.intdiv(Math.abs(this.x))
+        def newY = this.y == 0 ? 0 : this.y.intdiv(Math.abs(this.y))
+        return new Vector(newX, newY)
     }
 }
