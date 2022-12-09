@@ -5,96 +5,71 @@ import com.adventofcode.Solution
 
 class Day9 extends Solution {
 
-
     @Override
     def part1(String input) {
         def rope = getRope(2)
-        executeMovesOn(rope, input)
-        return rope.tail().positions.unique().size()
+        def moves = getMoves(input)
+        return getTailPositionAfter(rope, moves).size()
     }
 
     @Override
     def part2(String input) {
         def rope = getRope(10)
-        executeMovesOn(rope, input)
-        return rope.tail().positions.unique().size()
+        def moves = getMoves(input)
+        return getTailPositionAfter(rope, moves).size()
     }
 
-    static executeMovesOn(Knot rope, String input) {
-        input.tokenize().each {
-            if (it.isNumber()) {
-                Integer.parseInt(it).times {
-                    rope.move()
-                }
-            } else {
-                rope.setDirection(it)
-            }
+    static getTailPositionAfter(Knot rope, List<Vector> moves) {
+        def tailPositions = []
+        moves.each {
+            rope.move(it)
+            tailPositions.add(rope.tail().position)
         }
+        return tailPositions.unique()
     }
+
+    static List<Vector> getMoves(String input) {
+        input.split("\n")
+                .collect {
+                    def move = it.split(' ')
+                    move[0] * Integer.parseInt(move[1])
+                }
+                .flatten()
+                .join("")
+                .collect { directions.get(it) }
+    }
+
+    static def directions = [
+            'R': new Vector(1, 0),
+            'L': new Vector(-1, 0),
+            'U': new Vector(0, 1),
+            'D': new Vector(0, -1)
+    ]
 
     static getRope(int nKnots) {
-        def origin = new Vector(0, 0)
-        List<Knot> rope = []
-        nKnots.times {
-            if (rope.isEmpty()) {
-                rope.add(new Knot(origin))
-            } else {
-                rope.add(new Knot(origin, rope.last()))
-            }
+        (1..nKnots).inject(null) {
+            previous, i -> new Knot(new Vector(0, 0), previous as Knot)
         }
-        return rope.last()
     }
 }
 
 class Knot {
     Vector position
-    Vector directionVector
     Knot next
-    List<Vector> positions = []
-
-    Knot(Vector origin) {
-        this(origin, null)
-    }
 
     Knot(Vector origin, Knot next) {
         this.position = origin
-        this.positions.add(origin)
         this.next = next
     }
 
     Knot tail() {
-        def tail = this
-        while (tail.next != null) {
-            tail = tail.next
-        }
-        return tail
+        return next == null ? this : next.tail()
     }
 
-    void setDirection(String direction) {
-        switch (direction) {
-            case 'R':
-                directionVector = new Vector(1, 0)
-                break
-            case 'L':
-                directionVector = new Vector(-1, 0)
-                break
-            case 'U':
-                directionVector = new Vector(0, 1)
-                break
-            case 'D':
-                directionVector = new Vector(0, -1)
-                break
-            default:
-                throw new RuntimeException("Unrecognized direction" + direction)
-        }
-    }
-
-    void move() {
-        position += directionVector
-        positions.add(position)
+    void move(Vector direction) {
+        position += direction
         if (next != null && position.isNotAdjacentTo(next.position)) {
-            next.directionVector = next.position.directionTowards(position)
-            next.move()
+            next.move(next.position.directionTowards(position))
         }
     }
 }
