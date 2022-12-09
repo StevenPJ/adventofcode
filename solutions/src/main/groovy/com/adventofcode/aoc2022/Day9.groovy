@@ -27,14 +27,11 @@ class Day9 extends Solution {
     }
 
     static List<Vector> getMoves(String input) {
-        input.split("\n")
-                .collect {
-                    def move = it.split(' ')
-                    move[0] * Integer.parseInt(move[1])
-                }
-                .flatten()
-                .join("")
-                .collect { directions.get(it) }
+        input.tokenize()
+                .collate(2)
+                .collect{ it[0] * Integer.parseInt(it[1]) }
+                .join()
+                .collect { directions.get(it)}
     }
 
     static def directions = [
