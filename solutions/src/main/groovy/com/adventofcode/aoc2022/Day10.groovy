@@ -21,16 +21,8 @@ class Day10 extends Solution {
     }
 
     static getXRegister(String input) {
-        def x = [1]
-        def lastCommand = null
-        input.tokenize().eachWithIndex{ String command, int cycle ->
-            if (lastCommand == 'addx')
-                x << x.last() + Integer.parseInt(command)
-            else
-                x << x.last()
-            lastCommand = command
+        input.tokenize().inject([1]) { result, command ->
+            result << result.last() + (command.isNumber() ? Integer.parseInt(command) : 0)
         }
-        return x
     }
-
 }
