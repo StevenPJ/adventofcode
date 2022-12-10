@@ -1,35 +1,35 @@
 ## Solutions
 ```
 ----- 2022, Day 1 -----
- 106ms Part 1: 68775
-  31ms Part 2: 202585
+  86ms Part 1: 68775
+  45ms Part 2: 202585
 ----- 2022, Day 2 -----
-  22ms Part 1: 11603
+  17ms Part 1: 11603
    2ms Part 2: 12725
 ----- 2022, Day 3 -----
-  78ms Part 1: 7568
-  62ms Part 2: 2780
+  62ms Part 1: 7568
+  34ms Part 2: 2780
 ----- 2022, Day 4 -----
-  73ms Part 1: 456
-  54ms Part 2: 808
+  95ms Part 1: 456
+  83ms Part 2: 808
 ----- 2022, Day 5 -----
-  65ms Part 1: GFTNRBZPF
-  23ms Part 2: VRQWPDSGP
+  51ms Part 1: GFTNRBZPF
+  25ms Part 2: VRQWPDSGP
 ----- 2022, Day 6 -----
-  19ms Part 1: 1707
-  15ms Part 2: 3697
+  10ms Part 1: 1707
+  13ms Part 2: 3697
 ----- 2022, Day 7 -----
-  78ms Part 1: 919137
-  25ms Part 2: 2877389
+  45ms Part 1: 919137
+  16ms Part 2: 2877389
 ----- 2022, Day 8 -----
- 567ms Part 1: 1669
-2429ms Part 2: 331344
+ 435ms Part 1: 1669
+2352ms Part 2: 331344
 ----- 2022, Day 9 -----
-5453ms Part 1: 6197
-1828ms Part 2: 2562
+5946ms Part 1: 6197
+1964ms Part 2: 2562
 ----- 2022, Day 10 -----
-   3ms Part 1: 14320
-  11ms Part 2: 
+   4ms Part 1: 14320
+  12ms Part 2: 
 ###...##..###..###..#..#..##..###....##.
 #..#.#..#.#..#.#..#.#.#..#..#.#..#....#.
 #..#.#....#..#.###..##...#..#.#..#....#.
