@@ -161,7 +161,7 @@ class Day9Spec extends Specification {
 
     def "part 2 example"() {
         expect:
-        new Day10().part2(example) == '''\
+        new Day10().part2(example) == '''
                 ##..##..##..##..##..##..##..##..##..##..
                 ###...###...###...###...###...###...###.
                 ####....####....####....####....####....

@@ -13,16 +13,11 @@ class Day10 extends Solution {
 
     @Override
     def part2(String input) {
-        def x = getXRegister(input)
-        def crt = []
-        x.eachWithIndex { int entry, int cycle ->
-            if ([entry-1, entry, entry+1].contains(cycle % 40))
-                crt << '#'
-            else
-                crt << '.'
+        getXRegister(input).dropRight(1).withIndex().inject('') { result, it ->
+            def positionInRow = it.last() % 40
+            def containsSprite = ( it.first()-1..it.first()+1 ).contains(positionInRow)
+            result.concat(positionInRow == 0 ? '\n' : '').concat(containsSprite ? '#' : '.')
         }
-        crt.removeLast()
-        return crt.collate(40).collect {it.join()}.join("\n")
     }
 
     static getXRegister(String input) {

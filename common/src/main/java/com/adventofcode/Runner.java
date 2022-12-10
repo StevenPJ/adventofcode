@@ -15,25 +15,17 @@ class Runner {
             try {
                 timer.start();
                 var answer = solution.part1();
-                display.print(format("%4dms Part 1: %s", timer.elapsed().toMillis(), formatAnswer(answer)));
+                display.print(format("%4dms Part 1: %s", timer.elapsed().toMillis(), answer));
             } catch (UnsupportedOperationException ex) {
                 display.print(format("%4dms Part 1: %s", 0, "unsolved"));
             }
             try {
                 timer.start();
                 var answer = solution.part2();
-                display.print(format("%4dms Part 2: %s", timer.elapsed().toMillis(), formatAnswer(answer)));
+                display.print(format("%4dms Part 2: %s", timer.elapsed().toMillis(), answer));
             } catch (UnsupportedOperationException ex) {
                 display.print(format("%4dms Part 2: %s", 0, "unneeded"));
             }
         });
-    }
-
-    private static String formatAnswer(Object answer) {
-        if (answer instanceof String s) {
-            if (s.contains("\n"))
-                return '\n' + s;
-        }
-        return answer.toString();
     }
 }
