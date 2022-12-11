@@ -25,30 +25,21 @@ class Day11 extends Solution {
     }
 
     static getMonkeyBusinessAfterNRounds(List<Monkey> monkeys, int nRounds, Closure<Long> worryReductionFunction) {
-        def rounds = (1..nRounds).collect {
-            monkeys.collect { it.takeTurn(monkeys, worryReductionFunction) }
+        def inspections = [0] * monkeys.size()
+        nRounds.times {
+            monkeys.eachWithIndex { monkey, index ->
+                inspections[index] += monkey.items.size()
+                monkey.takeTurn(monkeys, worryReductionFunction)
+            }
         }
-        return getMonkeyBusiness(rounds)
-    }
-
-    static getMonkeyBusiness(def roundResults) {
-        roundResults
-                .transpose()
-                .collect {it.sum()}
-                .sort()
-                .reverse()
-                .take(2)
-                .inject(1) { a, b -> a * b as Long}
+       return inspections.sort{-it}.take(2).inject(1) { a, b -> a * b as Long}
     }
 }
-
 
 class Monkey {
     List<Long> items
     Closure<Long> operation
-    Integer testValue
-    Integer throwToWhenTrue
-    Integer throwToWhenFalse
+    Integer testValue, throwToWhenTrue, throwToWhenFalse
 
     static def operators = [
             "+":  { factor, item -> item + factor.call(item) },
@@ -58,31 +49,32 @@ class Monkey {
     ]
 
     Monkey(String input) {
-        input.split("\n").each {
-            if (it.contains("Starting items:"))
-                this.items = it.replace("Starting items:", "").split(",").collect{ Long.parseLong(it.trim())}
-            if (it.contains("Operation:")) {
-                def function = it.replace("Operation: new = old ", "").tokenize()
-                this.operation = operators.get(function[0]).curry({ item -> function[1] == 'old' ? item : Long.parseLong(function[1]) })
-            }
-            if (it.contains("Test:"))
-                this.testValue = Integer.parseInt(it.tokenize().last())
-            if (it.contains("If true:"))
-                this.throwToWhenTrue = Integer.parseInt(it.tokenize().last())
-            if (it.contains("If false:"))
-                this.throwToWhenFalse = Integer.parseInt(it.tokenize().last())
-        }
+        def monkeySpec =  input
+                .replace("Starting items: ", "")
+                .replace("Operation: new = old ", "")
+                .replace("Test: divisible by ", "")
+                .replace("If true: throw to monkey ", "")
+                .replace("If false: throw to monkey ", "")
+                .split("\n")
+                .findAll { !it.isAllWhitespace()}
+                .takeRight(5)
+                .collect{ it.trim()}
+        this.items = monkeySpec[0].tokenize (",").collect{ Long.parseLong(it.trim())}
+        def operationSpec = monkeySpec[1].tokenize()
+        def factor = operationSpec.last() == 'old' ? null : Long.parseLong(operationSpec.last())
+        this.operation = operators.get(operationSpec.first()).curry({ item -> factor ?: item })
+        this.testValue = Integer.parseInt(monkeySpec[2])
+        this.throwToWhenTrue = Integer.parseInt(monkeySpec[3])
+        this.throwToWhenFalse = Integer.parseInt(monkeySpec[4])
     }
 
-    int takeTurn(List<Monkey> monkeys, Closure<Long> worryLevelReduction) {
-        def nInspections = items.size()
-        nInspections.times {
+    def takeTurn(List<Monkey> monkeys, Closure<Long> worryLevelReduction) {
+        items.size().times {
             def inspecting = items.pop()
             def newWorryLevel = operation.call(inspecting)
             def managedWorryLevel = worryLevelReduction.call(newWorryLevel)
             def throwTo = managedWorryLevel % testValue == 0 ? throwToWhenTrue : throwToWhenFalse
             monkeys[throwTo].items << managedWorryLevel
         }
-        return nInspections
     }
 }
