@@ -31,15 +31,8 @@ class Day9 extends Solution {
                 .collate(2)
                 .collect{ it[0] * Integer.parseInt(it[1]) }
                 .join()
-                .collect { directions.get(it)}
+                .collect { Vector.directions.get(it)}
     }
-
-    static def directions = [
-            'R': new Vector(1, 0),
-            'L': new Vector(-1, 0),
-            'U': new Vector(0, 1),
-            'D': new Vector(0, -1)
-    ]
 
     static getRope(int nKnots) {
         (1..nKnots).inject(null) {
@@ -47,6 +40,8 @@ class Day9 extends Solution {
         }
     }
 }
+
+
 
 class Knot {
     Vector position
@@ -71,7 +66,14 @@ class Knot {
     }
 }
 
-class Vector {
+public class Vector {
+    public static def directions = [
+            'R': new Vector(1, 0),
+            'L': new Vector(-1, 0),
+            'U': new Vector(0, 1),
+            'D': new Vector(0, -1)
+    ]
+
     int x, y
 
     Vector(int x, int y) {
@@ -82,6 +84,11 @@ class Vector {
     @Override
     boolean equals(Object other) {
         return this.x == other.x && this.y == other.y
+    }
+
+    @Override
+    int hashCode() {
+        return x.hashCode() + y.hashCode()
     }
 
     Vector plus(Vector other) {

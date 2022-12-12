@@ -15,4 +15,4 @@ for i in $(seq 31 $END); do
   fi
 done
 
-java -jar -DINPUT_DIR="$(realpath inputs)" solutions/build/libs/solutions-1.0-SNAPSHOT-all.jar "$@"
+java -Xss4m -jar -DINPUT_DIR="$(realpath inputs)" solutions/build/libs/solutions-1.0-SNAPSHOT-all.jar "$@"
