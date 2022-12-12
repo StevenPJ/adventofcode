@@ -19,7 +19,6 @@ jobs:
         with:
           userid: 1595654
           session: ${{ secrets.AOC_SESSIONID }}
-          dayRegex: '(?<=https:\/\/img\.shields\.io\/badge\/day%20📅-)[0-9]+(?=-blue)'
           starsRegex: '(?<=https:\/\/img\.shields\.io\/badge\/stars%20⭐-)[0-9]+(?=-yellow)'
           daysCompletedRegex: '(?<=https:\/\/img\.shields\.io\/badge\/days%20completed-)[0-9]+(?=-red)'
       - shell: bash
