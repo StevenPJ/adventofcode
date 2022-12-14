@@ -1,38 +1,38 @@
-![](https://img.shields.io/badge/stars%20⭐-26-yellow) ![](https://img.shields.io/badge/days%20completed-13-red)
+![](https://img.shields.io/badge/stars%20⭐-28-yellow) ![](https://img.shields.io/badge/days%20completed-14-red)
 
 
 ## Solutions
 ```
 ----- 2022, Day 1 -----
-  88ms Part 1: 68775
-  37ms Part 2: 202585
+ 155ms Part 1: 68775
+  51ms Part 2: 202585
 ----- 2022, Day 2 -----
-  20ms Part 1: 11603
-   5ms Part 2: 12725
+  33ms Part 1: 11603
+   3ms Part 2: 12725
 ----- 2022, Day 3 -----
-  79ms Part 1: 7568
-  46ms Part 2: 2780
+  76ms Part 1: 7568
+  53ms Part 2: 2780
 ----- 2022, Day 4 -----
- 101ms Part 1: 456
-  72ms Part 2: 808
+ 114ms Part 1: 456
+  91ms Part 2: 808
 ----- 2022, Day 5 -----
-  64ms Part 1: GFTNRBZPF
-  34ms Part 2: VRQWPDSGP
+  62ms Part 1: GFTNRBZPF
+  29ms Part 2: VRQWPDSGP
 ----- 2022, Day 6 -----
-  20ms Part 1: 1707
+  15ms Part 1: 1707
   16ms Part 2: 3697
 ----- 2022, Day 7 -----
-  85ms Part 1: 919137
-  26ms Part 2: 2877389
+  95ms Part 1: 919137
+  34ms Part 2: 2877389
 ----- 2022, Day 8 -----
- 910ms Part 1: 1669
-2743ms Part 2: 331344
+ 655ms Part 1: 1669
+3157ms Part 2: 331344
 ----- 2022, Day 9 -----
-6135ms Part 1: 6197
-2128ms Part 2: 2562
+7077ms Part 1: 6197
+2376ms Part 2: 2562
 ----- 2022, Day 10 -----
    5ms Part 1: 14320
-  11ms Part 2: 
+  12ms Part 2: 
 ###...##..###..###..#..#..##..###....##.
 #..#.#..#.#..#.#..#.#.#..#..#.#..#....#.
 #..#.#....#..#.###..##...#..#.#..#....#.
@@ -40,12 +40,15 @@
 #....#..#.#....#..#.#.#..#..#.#....#..#.
 #.....##..#....###..#..#.#..#.#.....##..
 ----- 2022, Day 11 -----
- 112ms Part 1: 69918
- 956ms Part 2: 19573408701
+  81ms Part 1: 69918
+1273ms Part 2: 19573408701
 ----- 2022, Day 12 -----
-3429ms Part 1: 447
-2958ms Part 2: 446
+3968ms Part 1: 447
+3485ms Part 2: 446
 ----- 2022, Day 13 -----
-  24ms Part 1: 5013
-  48ms Part 2: 25038
+  28ms Part 1: 5013
+  72ms Part 2: 25038
+----- 2022, Day 14 -----
+ 516ms Part 1: 768
+17098ms Part 2: 26686
 ```
