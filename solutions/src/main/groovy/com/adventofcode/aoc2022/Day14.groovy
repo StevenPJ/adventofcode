@@ -11,12 +11,15 @@ class Day14 extends Solution {
     def part1(String input) {
         def cave = parseCave(input)
         def nRocks = cave.size()
-        def floor = cave.y.max()
-        def previous = []
-        def stack = [SOURCE]
-        while(previous != cave) {
-            previous = cave
-            cave = simulateSandFall(cave, floor, stack)
+        List<Vector> crawler = [SOURCE]
+        while(crawler.first().y <= cave.y.max()) {
+            def source = crawler.first()
+            def next = nextSteps(source).find{!cave.contains(it)}
+            if (next == null) {
+                cave << crawler.pop()
+            } else {
+                crawler.push(next)
+            }
         }
         return cave.size() - nRocks
     }
@@ -24,17 +27,22 @@ class Day14 extends Solution {
     @Override
     def part2(String input) {
         def cave = parseCave(input)
-        def floor = getFloor(cave)
-        cave += floor
         def nRocks = cave.size()
-        def stack = [SOURCE]
-        while (cave.first() != SOURCE) {
-            cave = simulateSandFall(cave, floor.y.max(), stack)
+        def floor = cave.y.max() + 2
+        List<Vector> crawler = [SOURCE]
+        while(!cave.contains(SOURCE)) {
+            def source = crawler.first()
+            def next = nextSteps(source).find{!cave.contains(it)}
+            if (next == null || next.y >= floor) {
+                cave << crawler.pop()
+            } else {
+                crawler.push(next)
+            }
         }
         return cave.size() - nRocks
     }
 
-    static List<Vector> parseCave(String input) {
+    static Set<Vector> parseCave(String input) {
         input.split("\n").collect { path ->
             path.split(" -> ")
                     .collect { new JsonSlurper().parseText("[$it]") as List<Integer> }
@@ -44,28 +52,7 @@ class Day14 extends Solution {
                                 .combinations()
                                 .collect { new Vector(it[0], it[1]) }
                     }.flatten()
-        }.flatten().unique()
-    }
-
-    static def getFloor(List<Vector> cave) {
-        def floorY = cave.collect { it.y }.max() + 2
-        [(0..1000), (floorY..floorY)]
-                .combinations()
-                .collect { new Vector(it[0], it[1]) }
-    }
-
-    List<Vector> simulateSandFall(List<Vector> cave, int floor, List<Vector> sources) {
-        def source = sources.pop()
-        def nextStep = nextSteps(source).find{!cave.contains(it)}
-        if (nextStep == null) {
-            return [source] + cave
-        }
-        if (nextStep.y >= floor) {
-            return cave
-        }
-        sources.push(source)
-        sources.push(nextStep)
-        return simulateSandFall(cave, floor, sources)
+        }.flatten().unique() as HashSet
     }
 
     static def nextSteps(Vector sand) {
