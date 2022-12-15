@@ -82,6 +82,11 @@ public class Vector {
     }
 
     @Override
+    String toString() {
+        return [x,y]
+    }
+
+    @Override
     boolean equals(Object other) {
         return this.x == other.x && this.y == other.y
     }
@@ -99,6 +104,10 @@ public class Vector {
         return new Vector(x - other.x, y - other.y)
     }
 
+    Vector multiply(int constant) {
+        return new Vector(x * constant, y * constant)
+    }
+
     int magnitude() {
         return Math.sqrt(this.x*this.x + this.y*this.y)
     }
@@ -107,5 +116,17 @@ public class Vector {
         def newX = this.x == 0 ? 0 : this.x.intdiv(Math.abs(this.x))
         def newY = this.y == 0 ? 0 : this.y.intdiv(Math.abs(this.y))
         return new Vector(newX, newY)
+    }
+
+    int manhattanDistanceTo(Vector other) {
+        Math.abs(this.x - other.x) + Math.abs(this.y - other.y)
+    }
+
+    Set<Integer[]> pointsAlongLine(Vector other, int nPoints) {
+        def directionVector = (other - this).normalize()
+        (1..nPoints).collect{
+            def result = this + (directionVector * (it-1) )
+            return [result.x, result.y].toArray()
+        }
     }
 }

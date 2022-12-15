@@ -14,7 +14,11 @@ repositories {
 
 dependencies {
     implementation project(path: ':common')
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
+    testCompileOnly 'org.projectlombok:lombok:1.18.24'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
     implementation "org.codehaus.groovy:groovy-all:3.0.13"
     testImplementation "org.spockframework:spock-core:2.3-groovy-3.0"
 }
