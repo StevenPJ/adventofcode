@@ -1,38 +1,38 @@
-![](https://img.shields.io/badge/stars%20⭐-28-yellow) ![](https://img.shields.io/badge/days%20completed-14-red)
+![](https://img.shields.io/badge/stars%20⭐-30-yellow) ![](https://img.shields.io/badge/days%20completed-15-red)
 
 
 ## Solutions
 ```
 ----- 2022, Day 1 -----
- 159ms Part 1: 68775
-  30ms Part 2: 202585
+  96ms Part 1: 68775
+  53ms Part 2: 202585
 ----- 2022, Day 2 -----
-  20ms Part 1: 11603
-   3ms Part 2: 12725
+  26ms Part 1: 11603
+   2ms Part 2: 12725
 ----- 2022, Day 3 -----
-  64ms Part 1: 7568
+  58ms Part 1: 7568
   39ms Part 2: 2780
 ----- 2022, Day 4 -----
- 109ms Part 1: 456
-  79ms Part 2: 808
+ 101ms Part 1: 456
+ 123ms Part 2: 808
 ----- 2022, Day 5 -----
-  68ms Part 1: GFTNRBZPF
-  27ms Part 2: VRQWPDSGP
+  53ms Part 1: GFTNRBZPF
+  25ms Part 2: VRQWPDSGP
 ----- 2022, Day 6 -----
-  16ms Part 1: 1707
-  15ms Part 2: 3697
+  15ms Part 1: 1707
+  16ms Part 2: 3697
 ----- 2022, Day 7 -----
-  80ms Part 1: 919137
-  36ms Part 2: 2877389
+ 102ms Part 1: 919137
+  30ms Part 2: 2877389
 ----- 2022, Day 8 -----
- 589ms Part 1: 1669
-2729ms Part 2: 331344
+ 597ms Part 1: 1669
+2847ms Part 2: 331344
 ----- 2022, Day 9 -----
-6802ms Part 1: 6197
-2293ms Part 2: 2562
+5522ms Part 1: 6197
+1938ms Part 2: 2562
 ----- 2022, Day 10 -----
-   7ms Part 1: 14320
-  13ms Part 2: 
+   5ms Part 1: 14320
+  12ms Part 2: 
 ###...##..###..###..#..#..##..###....##.
 #..#.#..#.#..#.#..#.#.#..#..#.#..#....#.
 #..#.#....#..#.###..##...#..#.#..#....#.
@@ -40,15 +40,18 @@
 #....#..#.#....#..#.#.#..#..#.#....#..#.
 #.....##..#....###..#..#.#..#.#.....##..
 ----- 2022, Day 11 -----
-  86ms Part 1: 69918
-1106ms Part 2: 19573408701
+  81ms Part 1: 69918
+1111ms Part 2: 19573408701
 ----- 2022, Day 12 -----
-3403ms Part 1: 447
-2826ms Part 2: 446
+3524ms Part 1: 447
+3273ms Part 2: 446
 ----- 2022, Day 13 -----
-  25ms Part 1: 5013
-  47ms Part 2: 25038
+  24ms Part 1: 5013
+  40ms Part 2: 25038
 ----- 2022, Day 14 -----
- 602ms Part 1: 768
- 712ms Part 2: 26686
+ 588ms Part 1: 768
+ 662ms Part 2: 26686
+----- 2022, Day 15 -----
+  34ms Part 1: 5100463
+49626ms Part 2: 11557863040754
 ```
