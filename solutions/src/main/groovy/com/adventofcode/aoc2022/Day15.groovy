@@ -19,21 +19,18 @@ class Day15 extends Solution {
 
     def part1(String input, int y) {
         def sensors = parseSensorReport(input)
-        def scanned = Line.combine(sensors*.scannedLine(y))
+        def scanned = Line.combine(sensors*.scanned(y))
         return scanned.sum{it.size()}
     }
 
     def part2(String input, int maxY) {
         def sensors = parseSensorReport(input)
-        def result = [].toSet()
-        sensors.find { sensor ->
+        for (Sensor sensor : sensors) {
             def undetected = sensor.findPointInPerimeterThatDoesNotOverlapWith(sensors, maxY)
             if (undetected != null) {
-                result << (BigInteger.valueOf(4000000) * undetected.x) + undetected.y
-                return true
+                return (BigInteger.valueOf(4000000) * undetected.x) + undetected.y
             }
         }
-        return result.first()
     }
 
     static def parseSensorReport(String input) {
@@ -77,7 +74,7 @@ class Line {
         end - start
     }
 
-    List<Vector> perimeterNodes() {
+    def perimeterNodes() {
         [new Vector(start - 1, y), new Vector(end - 1, y)]
     }
 }
@@ -95,7 +92,7 @@ class Sensor {
         this.distance = position.manhattanDistanceTo(beacon)
     }
 
-    Line scannedLine(int y) {
+    Line scanned(int y) {
         int radius = distance - Math.abs(position.y - y)
         return new Line(position.x - radius, position.x + radius, y)
     }
@@ -106,12 +103,19 @@ class Sensor {
 
     Vector findPointInPerimeterThatDoesNotOverlapWith(List<Sensor> others, int max) {
         for (int y=position.y - distance; y<=position.y + distance; y++) {
-            def uncovered = scannedLine(y).perimeterNodes().find{ point ->
-                inBoundary(point, max) && others.find{it.contains(point)} == null
+            for (def point : scanned(y).perimeterNodes()) {
+                if (inBoundary(point, max) && !scannedBy(point, others))
+                    return point
             }
-            if (uncovered != null)
-                return uncovered
         }
+    }
+
+    static boolean scannedBy(Vector point, List<Sensor> sensors) {
+        for (def sensor : sensors) {
+            if (sensor.contains(point))
+                return true
+        }
+        return false
     }
 
     static boolean inBoundary(Vector vector, int max) {

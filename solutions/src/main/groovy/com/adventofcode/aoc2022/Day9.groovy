@@ -1,6 +1,8 @@
 package com.adventofcode.aoc2022
 
 import com.adventofcode.Solution
+import groovy.transform.EqualsAndHashCode
+import lombok.ToString
 
 
 class Day9 extends Solution {
@@ -66,6 +68,8 @@ class Knot {
     }
 }
 
+@EqualsAndHashCode
+@ToString
 public class Vector {
     public static def directions = [
             'R': new Vector(1, 0),
@@ -79,21 +83,6 @@ public class Vector {
     Vector(int x, int y) {
         this.x = x
         this.y = y
-    }
-
-    @Override
-    String toString() {
-        return [x,y]
-    }
-
-    @Override
-    boolean equals(Object other) {
-        return this.x == other.x && this.y == other.y
-    }
-
-    @Override
-    int hashCode() {
-        return x.hashCode() + y.hashCode()
     }
 
     Vector plus(Vector other) {
