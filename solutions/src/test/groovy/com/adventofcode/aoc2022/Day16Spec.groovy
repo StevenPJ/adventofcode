@@ -22,4 +22,10 @@ class Day16Spec extends Specification {
         expect:
         new Day16().part1(example) == 1651
     }
+
+    def "part 2 example"() {
+
+        expect:
+        new Day16().part2(example) == 1707
+    }
 }
