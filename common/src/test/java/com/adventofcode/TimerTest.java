@@ -21,12 +21,6 @@ class TimerTest {
         var tenMillis = timer.elapsed();
 
         assertThat(fiftyMillis).isGreaterThan(tenMillis);
-        assertThat(fiftyMillis)
-                .isGreaterThan(Duration.ofMillis(50))
-                .isLessThan(Duration.ofMillis(100));
-        assertThat(tenMillis)
-                .isGreaterThan(Duration.ofMillis(10))
-                .isLessThan(Duration.ofMillis(30));
     }
 
 }

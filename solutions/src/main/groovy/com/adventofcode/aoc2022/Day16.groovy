@@ -9,51 +9,44 @@ class Day16 extends Solution {
     @Override
     def part1(String input) {
         def graph = parseValves(input)
-        def paths = graph.paths()
-        def workingValves = graph.workingValves()
-        findMostPressure('AA', 0, 30, paths, workingValves, graph, new HashSet<String>())
+        findMaxPressure(State.start(graph), 30)
     }
 
     @Override
     def part2(String input) {
         def graph = parseValves(input)
-        def paths = graph.paths()
-        def workingValves = graph.workingValves()
-
-        findMostPressureTwo('AA', 'AA', 0, 0, 26, paths, workingValves, graph, new HashSet<String>())
+        findMaxPressureWithHelp(State.start(graph), State.start(graph), 26)
     }
 
-    def findMostPressure(String currentValve, int timeElapsed, int maxTime, Map<String, Map<String,Integer>> paths, Set<String> workingValves, Graph graph, HashSet<String> openedValves) {
-        def candidates = workingValves.findAll{!openedValves.contains(it)}
-        candidates.collect{ valve ->
-            def timeToValve = timeElapsed + paths[currentValve][valve] + 1
-            if (timeToValve > maxTime)
+    def findMaxPressure(State state, int maxTime) {
+        state.workingValves.collect{ valve ->
+            def timeToValve = state.timeToMoveToValve(valve)
+            if (timeToValve > maxTime || state.hasOpened(valve))
                 return 0
             def minutesOpened = maxTime - timeToValve
-            def totalPressureFromValve = minutesOpened * graph.nodes[valve]
-            return totalPressureFromValve + findMostPressure(valve, timeToValve, maxTime, paths, workingValves, graph, openedValves + valve)
+            def totalPressureFromValve = minutesOpened * state.flowRate(valve)
+            return totalPressureFromValve + findMaxPressure(state.next(valve, timeToValve), maxTime)
         }.max() ?: 0
     }
 
-    def findMostPressureTwo(String currentValve, String elephantCurrentValve, int timeElapsed, int elephantTime, int maxTime, Map<String, Map<String,Integer>> paths, Set<String> workingValves, Graph graph, HashSet<String> openedValves) {
-        def candidates = workingValves.findAll{!openedValves.contains(it)}
-        def elephantCandidates = workingValves.findAll{!openedValves.contains(it)}
-        candidates.collect{ valve ->
-            def timeToValve = timeElapsed + paths[currentValve][valve] + 1
-            if (timeToValve > maxTime)
+    def findMaxPressureWithHelp(State player, State elephant, int maxTime) {
+        player.workingValves.collect{ valve ->
+            def timeToValve = player.timeToMoveToValve(valve)
+            if (timeToValve > maxTime || player.hasOpened(valve))
                 return 0
             def minutesOpened = maxTime - timeToValve
-            def totalPressureFromValve = minutesOpened * graph.nodes[valve]
-            return totalPressureFromValve + elephantCandidates.collect {elephantValve ->
-                if (elephantValve == valve)
-                    return -1
-                def elephantTimeToValve = elephantTime + paths[elephantCurrentValve][elephantValve] + 1
-                if (elephantTimeToValve > maxTime)
+            def totalPressureFromValve = minutesOpened * player.flowRate(valve)
+            return totalPressureFromValve + elephant.workingValves.collect { elephantValve ->
+                def elephantTimeToValve = elephant.timeToMoveToValve(elephantValve)
+                if (elephantTimeToValve > maxTime || elephant.hasOpened(elephantValve) ||  elephantValve == valve)
                     return 0
                 def elephantMinutesOpened = maxTime - elephantTimeToValve
-                def totalPressureFromElephant = elephantMinutesOpened * graph.nodes[elephantValve]
-                return totalPressureFromElephant + findMostPressureTwo(valve, elephantValve, timeToValve, elephantTimeToValve, maxTime, paths, workingValves, graph, openedValves + valve + elephantValve)
-
+                def totalPressureFromElephant = elephantMinutesOpened * elephant.flowRate(elephantValve)
+                def opened = new HashSet(player.openedValves) + valve + elephantValve
+                return totalPressureFromElephant + findMaxPressureWithHelp(
+                        player.next(valve, timeToValve, opened),
+                        elephant.next(elephantValve, elephantTimeToValve, opened),
+                        maxTime)
             }.max() ?: 0
         }.max() ?: 0
     }
@@ -71,19 +64,51 @@ class Day16 extends Solution {
 
 @EqualsAndHashCode
 @TupleConstructor(includeFields = true)
+class State {
+    String currentValve
+    int timeElapsed
+    Map<String, Map<String, Integer>> paths
+    Set<String> workingValves
+    Graph graph
+    Set<String> openedValves
+
+    static State start(Graph graph) {
+        def workingValves = graph.nodes.findAll { it.value > 0}.keySet()
+        return new State('AA', 0, graph.paths(), workingValves, graph, new HashSet<String>())
+    }
+
+    boolean hasOpened(String valve) {
+        return openedValves.contains(valve)
+    }
+
+    int timeToMoveToValve(String valve) {
+        return timeElapsed + paths[currentValve][valve] + 1
+    }
+
+    int flowRate(String valve) {
+        graph.nodes[valve]
+    }
+
+    State next(String next, int timeElapsed) {
+        return new State(next, timeElapsed, paths, workingValves, graph, new HashSet(openedValves) + next)
+    }
+
+    State next(String next, int timeElapsed, Set<String> opened) {
+        return new State(next, timeElapsed, paths, workingValves, graph, opened)
+    }
+}
+
+@EqualsAndHashCode
+@TupleConstructor(includeFields = true)
 class Graph {
     Map<String, Integer> nodes = [:]
     Map<String, List<String>> edges = [:]
 
     Map<String, Map<String, Integer>> paths() {
-       nodes.keySet().collectEntries{ [(it): BFS(it)]}
+       nodes.keySet().collectEntries{ [(it): getShortestPaths(it)]}
     }
 
-    def workingValves() {
-        return nodes.findAll { it.value > 0}.keySet()
-    }
-
-    def BFS(String source) {
+    def getShortestPaths(String source) {
         def unsettled = [source]
         def settled = []
         def paths = [(source): 0].withDefault { key -> Integer.MAX_VALUE }
@@ -104,5 +129,3 @@ class Graph {
         return paths
     }
 }
-
-

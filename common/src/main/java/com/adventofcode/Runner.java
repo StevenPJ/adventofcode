@@ -15,14 +15,14 @@ class Runner {
             try {
                 timer.start();
                 var answer = solution.part1();
-                display.print(format("%4dms Part 1: %s", timer.elapsed().toMillis(), answer));
+                display.print(format("%6s Part 1: %s", timer.elapsed(), answer));
             } catch (UnsupportedOperationException ex) {
                 display.print(format("%4dms Part 1: %s", 0, "unsolved"));
             }
             try {
                 timer.start();
                 var answer = solution.part2();
-                display.print(format("%4dms Part 2: %s", timer.elapsed().toMillis(), answer));
+                display.print(format("%6s Part 2: %s", timer.elapsed(), answer));
             } catch (UnsupportedOperationException ex) {
                 display.print(format("%4dms Part 2: %s", 0, "unneeded"));
             }

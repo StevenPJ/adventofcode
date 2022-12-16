@@ -19,8 +19,8 @@ class RunnerTest {
     void shouldRunIncompleteSolution() {
 
         Mockito.when(timer.elapsed())
-                .thenReturn(Duration.ofMillis(10))
-                .thenReturn(Duration.ofMillis(1));
+                .thenReturn("10ms")
+                .thenReturn("1ms");
 
         runner.runSolutions( () -> Collections.singletonList(new IncompleteSolution()));
 
@@ -33,8 +33,8 @@ class RunnerTest {
     void shouldRunCompleteSolution() {
 
         Mockito.when(timer.elapsed())
-                .thenReturn(Duration.ofMillis(10))
-                .thenReturn(Duration.ofMillis(1000));
+                .thenReturn("10ms")
+                .thenReturn("1000ms");
 
         runner.runSolutions( () -> Collections.singletonList(new CompleteSolution()));
 
@@ -47,8 +47,8 @@ class RunnerTest {
     void shouldRunMultipleSolutions() {
 
         Mockito.when(timer.elapsed())
-                .thenReturn(Duration.ofMillis(10))
-                .thenReturn(Duration.ofMillis(1000));
+                .thenReturn("10ms")
+                .thenReturn("1000ms");
 
         runner.runSolutions( () -> Arrays.asList(new IncompleteSolution(), new CompleteSolution()));
 
