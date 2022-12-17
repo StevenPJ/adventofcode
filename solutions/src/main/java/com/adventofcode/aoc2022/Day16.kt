@@ -1,7 +1,7 @@
 package com.adventofcode.aoc2022
 
 import com.adventofcode.Solution
-import com.adventofcode.util.eachPermutationChooseK
+import com.adventofcode.util.permutationsChooseK
 import com.adventofcode.util.splitIgnoreEmpty
 
 
@@ -10,17 +10,17 @@ class Day16 : Solution() {
     override fun part1(input: String): Int {
         val graph = parseValves(input)
         val closedValves = graph.nodes.filter { it.value > 0 }.keys
-        return findMaxPressure("AA", 0, 30, graph.paths(), graph, closedValves)
+        val paths = graph.paths(listOf("AA") + closedValves)
+        return findMaxPressure("AA", 0, 30, paths, graph.nodes, closedValves)
     }
 
     override fun part2(input: String): Int {
         val graph = parseValves(input)
-        val paths = graph.paths()
         val closedValves = graph.nodes.filter { it.value > 0 }.keys
-        val playerValveOptions = getNChooseKValves(closedValves, closedValves.size / 2)
-        return playerValveOptions.maxOfOrNull { playerValves ->
-            findMaxPressure("AA", 0, 26, paths, graph, playerValves) +
-                    findMaxPressure("AA", 0, 26, paths, graph, closedValves - playerValves)
+        val paths = graph.paths(listOf("AA") + closedValves)
+        return closedValves.permutationsChooseK(closedValves.size / 2).maxOfOrNull { playerValves ->
+            findMaxPressure("AA", 0, 26, paths, graph.nodes, playerValves) +
+                    findMaxPressure("AA", 0, 26, paths, graph.nodes, closedValves - playerValves)
 
         } ?: 0
     }
@@ -30,7 +30,7 @@ class Day16 : Solution() {
         elapsed: Int,
         maxTime: Int,
         paths: Map<String, Map<String, Int>>,
-        graph: Graph,
+        valves: Map<String, Int>,
         closed: Set<String>
     ): Int {
         return closed.maxOfOrNull { valve ->
@@ -39,25 +39,17 @@ class Day16 : Solution() {
                 0
             } else {
                 val minutesOpen = maxTime - timeToValue
-                val totalPressureFromValve = minutesOpen * graph.nodes.getValue(valve)
+                val totalPressureFromValve = minutesOpen * valves.getValue(valve)
                 totalPressureFromValve + findMaxPressure(
                     currentValve = valve,
                     elapsed = timeToValue,
                     maxTime = maxTime,
                     paths = paths,
-                    graph = graph,
+                    valves = valves,
                     closed = closed - valve
                 )
             }
         } ?: 0
-    }
-
-    private fun getNChooseKValves(valves: Set<String>, k: Int): List<Set<String>> {
-        val result = hashSetOf<Set<String>>()
-        valves.toList().eachPermutationChooseK(k).forEach {
-            result.add(it.toHashSet())
-        }
-        return result.toList()
     }
 
     private fun parseValves(input: String): Graph {
@@ -78,8 +70,8 @@ data class Graph(
     val edges: MutableMap<String, List<String>> = mutableMapOf()
 ) {
 
-    fun paths(): Map<String, Map<String, Int>> {
-        return nodes.keys.associateWith { getShortestPaths(it) }
+    fun paths(valves: List<String>): Map<String, Map<String, Int>> {
+        return valves.associateWith { getShortestPaths(it) }
     }
 
     private fun getShortestPaths(source: String): Map<String, Int> {
