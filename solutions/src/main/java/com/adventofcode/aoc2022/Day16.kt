@@ -21,7 +21,6 @@ class Day16 : Solution() {
         return closedValves.permutationsChooseK(closedValves.size / 2).maxOfOrNull { playerValves ->
             findMaxPressure("AA", 0, 26, paths, graph.nodes, playerValves) +
                     findMaxPressure("AA", 0, 26, paths, graph.nodes, closedValves - playerValves)
-
         } ?: 0
     }
 
