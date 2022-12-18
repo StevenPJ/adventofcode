@@ -2,26 +2,55 @@ package com.adventofcode.aoc2022
 
 import com.adventofcode.Solution
 import com.adventofcode.util.repeatIndefinitely
+import org.apache.commons.lang3.builder.EqualsBuilder
+import org.apache.commons.lang3.builder.HashCodeBuilder
+import java.lang.RuntimeException
+import java.math.BigInteger
 
 
 class Day17 : Solution() {
 
-    override fun part1(input: String): Int {
+    override fun part1(input: String): BigInteger {
+        return heightAfter(BigInteger.valueOf(2022), input)
+    }
+
+    override fun part2(input: String): BigInteger {
+        return heightAfter(BigInteger.valueOf(1000000000000), input)
+    }
+
+    private fun heightAfter(n: BigInteger, input: String): BigInteger {
+        val hashes = hashMapOf<Int, Int>()
         val chamber = Chamber(input)
         var stoppedRocks = 0
         var rock = chamber.loadNext()
-        while (stoppedRocks < 2022) {
+        while (stoppedRocks.toBigInteger() < n) {
             while (true) {
                 val (next, atRest) = chamber.move(rock)
-                if (atRest)
-                    break
+                if (atRest) break
                 rock = next
             }
             chamber.save(rock)
+            if (hashes[chamber.hashCode()] != null) {
+                return calculateHeightUsingCycle(
+                    m = n,
+                    s = hashes[chamber.hashCode()]!!.toBigInteger(),
+                    c = stoppedRocks.toBigInteger(),
+                    input = input
+                )
+            } else hashes[chamber.hashCode()] = stoppedRocks
             rock = chamber.loadNext()
             stoppedRocks++
         }
-        return chamber.height()
+        return chamber.height().toBigInteger()
+    }
+
+    private fun calculateHeightUsingCycle(m: BigInteger, s: BigInteger, c: BigInteger, input: String): BigInteger {
+        val l = c - s
+        val hCycle = heightAfter(c, input) - heightAfter(s, input)
+        val nCycle = (m - s) / l
+        val r = (m - s) % l
+        val hr = heightAfter(r + s, input)
+        return (hCycle * nCycle) + hr
     }
 
     data class Rock(var maxRight: Int, val shape: List<Row>, val maxLeft: Int = 2) {
@@ -43,11 +72,18 @@ class Day17 : Solution() {
         override fun toString(): String {
             return shape.joinToString("\n") { it.toRow() }
         }
+
+        override fun hashCode(): Int {
+            return HashCodeBuilder()
+                .append(shape)
+                .hashCode()
+        }
     }
 
-    data class Chamber(val jetStream: String, val state: ArrayList<Row> = arrayListOf()) {
-
+    data class Chamber(val input: String, val state: ArrayList<Row> = arrayListOf()) {
+        private val jetStream = input.replace("\n", "").trim()
         private val jets = jetStream.trim()
+            .replace("\n", "")
             .replace("", "v")
             .toCharArray()
             .toList()
@@ -63,9 +99,19 @@ class Day17 : Solution() {
             Rock(3, List(2) { 0b0011000 }),
         ).repeatIndefinitely().iterator()
 
+        private var currentRock: Rock? = null
+        private var currentJetIndex: Int = 0
+
         fun loadNext(): Rock {
             val next = rocks.next()
+            currentRock = next
             repeat(3 + next.shape.size) { this.state.add(0, 0b0000000) }
+            return next
+        }
+
+        private fun nextJet(): Char {
+            val next = jets.next()
+            this.currentJetIndex++
             return next
         }
 
@@ -75,12 +121,12 @@ class Day17 : Solution() {
         }
 
         fun move(rock: Rock): Pair<Rock, Boolean> {
-            val jet = jets.next()
+            val jet = nextJet()
             val next = when (jet) {
                 '<' -> rock.left()
                 '>' -> rock.right()
                 'v' -> rock.down()
-                else -> rock
+                else -> throw RuntimeException("Unrecognized input character: $jet")
             }
             if (this.collidesWith(next))
                 return if (jet == 'v') rock to true
@@ -104,6 +150,44 @@ class Day17 : Solution() {
 
         override fun toString(): String {
             return state.joinToString("\n") { "|" + it.toRow() + "|" } + "\n+-------+"
+        }
+
+        private fun maxHeightOfCols(): Array<Int> {
+            val grid = state.toMutableList()
+            grid.removeIf { it == 0 }
+            val cols = Array(7) {this.height()}
+            val masks = mutableListOf(0b1000000, 0b0100000, 0b0010000, 0b0001000, 0b0000100, 0b0000010, 0b0000001)
+            grid.forEach{row ->
+                if (masks.isEmpty())
+                    return cols
+                val haveValues = masks.filter { row and it > 0 }
+                haveValues.forEach {mask ->
+                    val index = masks.indexOf(mask)
+                    cols[index] = grid.indexOf(row)
+                }
+                masks.removeAll(haveValues)
+            }
+            return cols
+        }
+
+        override fun hashCode(): Int {
+            return HashCodeBuilder(17, 31)
+                .append(currentJetIndex % (jetStream.length * 2))
+                .append(currentRock)
+                .append(maxHeightOfCols())
+                .toHashCode()
+        }
+
+        override fun equals(other: Any?): Boolean {
+            return when (other) {
+                !is Chamber -> false
+                this -> true
+                else -> EqualsBuilder()
+                    .append(currentJetIndex % jetStream.length , other.currentJetIndex % other.jetStream.length)
+                    .append(currentRock, other.currentRock)
+                    .append(maxHeightOfCols(), other.maxHeightOfCols())
+                    .isEquals
+            }
         }
     }
 }
