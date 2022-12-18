@@ -54,3 +54,10 @@ fun <T> Set<T>.permutationsChooseK(size: Int): List<Set<T>> =
             (list - item).permutationsChooseK(size - 1).map { it + item }
         }.distinct()
     }
+
+
+fun <T> Sequence<T>.repeatIndefinitely(): Sequence<T> =
+    generateSequence(this) { this }.flatten()
+
+fun <T> List<T>.repeatIndefinitely(): Sequence<T> =
+    this.asSequence().repeatIndefinitely()
