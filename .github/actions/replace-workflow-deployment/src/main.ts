@@ -53,6 +53,7 @@ export async function run(): Promise<void> {
     )
 
     const latestReplacedDeploymentStatus = replacedDeploymentStatuses.shift()
+    const environmentUrl = replacedDeployment.url
 
     core.info(
       `Replacing deployment ${replacedDeployment.id}: ${replacedDeployment.description}`,
@@ -93,6 +94,7 @@ export async function run(): Promise<void> {
         deployment_id: newDeployment.id,
         state: latestReplacedDeploymentStatus?.state ?? 'success',
         log_url: workflowUrl,
+        environment_url: environmentUrl,
         description: inputs.description,
         auto_inactive: true,
       })
