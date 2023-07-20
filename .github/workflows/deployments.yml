@@ -8,6 +8,7 @@ jobs:
     name: Deploy my app
     runs-on: ubuntu-latest
     environment: prd
+    continue-on-error: true
     steps:
       - name: Deploy my app
         run: exit 1
