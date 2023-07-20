@@ -101,6 +101,7 @@ function run() {
                 deployment_id: newDeployment.id,
                 state: (_a = latestReplacedDeploymentStatus === null || latestReplacedDeploymentStatus === void 0 ? void 0 : latestReplacedDeploymentStatus.state) !== null && _a !== void 0 ? _a : 'success',
                 log_url: workflowUrl,
+                environment_url: latestReplacedDeploymentStatus === null || latestReplacedDeploymentStatus === void 0 ? void 0 : latestReplacedDeploymentStatus.environment_url,
                 description: inputs.description,
                 auto_inactive: true,
             });
