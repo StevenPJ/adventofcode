@@ -92,7 +92,7 @@ export async function run(): Promise<void> {
         repo: github.context.repo.repo,
         deployment_id: newDeployment.id,
         state: latestReplacedDeploymentStatus?.state ?? 'success',
-        log_url: workflowUrl,
+        log_url: latestReplacedDeploymentStatus?.log_url,
         environment_url: latestReplacedDeploymentStatus?.environment_url,
         description: inputs.description,
         auto_inactive: true,
