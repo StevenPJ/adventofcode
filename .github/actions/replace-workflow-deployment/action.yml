@@ -1,0 +1,22 @@
+name: 'Replace Workflow Deployment'
+description: 'Replace a deployment created by the current workflow with a new one.'
+author: 'kylebjordahl'
+inputs:
+  environment: # change this
+    required: true
+    description: 'The environment for the deployment'
+  ref: # change this
+    required: true
+    description: 'The ref to link the deployment to'
+  description:
+    required: true
+    description: 'The description to display on the deployment (limited to 140 characters)'
+  token:
+    required: true
+    description: 'GitHub token with access to read and write deployments and deployment statuses'
+  payload:
+    required: true
+    description: 'The payload to add to the deployment'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
