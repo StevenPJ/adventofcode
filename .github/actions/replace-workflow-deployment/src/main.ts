@@ -27,8 +27,8 @@ export async function run(): Promise<void> {
     core.debug(`Fetched ${deployments.data.length} deployments`)
 
     deployments.data.forEach(d =>
-      core.debug(
-        `Found deployment [${d.id}(${d.updated_at}): ${d.description}]`,
+      core.info(
+        `Found deployment [${d.id}(${d.updated_at}): ${d}]`,
       ),
     )
 
