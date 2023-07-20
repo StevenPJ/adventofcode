@@ -60,8 +60,8 @@ function run() {
                 environment: inputs.environment,
             });
             core.debug(`Fetched ${deployments.data.length} deployments`);
-            deployments.data.forEach(d => core.debug(`Found deployment [${d.id}(${d.updated_at}): ${d.description}]`));
-            const replacedDeployment = deployments.data.filter(d => d.task.includes(inputs.service)).slice(0, 1).shift();
+            deployments.data.forEach(d => core.info(`Found deployment [${d.id}(${d.updated_at}): ${d}]`));
+            const replacedDeployment = deployments.data.filter(d => d.payload === {}).slice(0, 1).shift();
             if (!replacedDeployment) {
                 throw Error('Could not find a deployment to replace');
             }
