@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: prd
-      url: https://github.com
+      url: https://github.com/one
 
     continue-on-error: true
     steps:
@@ -28,3 +28,31 @@ jobs:
           environment: prd
           payload: '{"serviceName": "test-service", "namespace": "ssv"}'
           token: ${{ secrets.GITHUB_TOKEN }}
+          service: one
+
+
+  deploy-2:
+    name: Deploy my app
+    runs-on: ubuntu-latest
+    environment:
+      name: prd
+      url: https://github.com/test
+
+    continue-on-error: true
+    steps:
+      - name: Deploy my app
+        run: exit 1
+
+  clean_up_deploy-2:
+    runs-on: ubuntu-latest
+    needs: [ deploy ]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/replace-workflow-deployment
+        with:
+          ref: ${{ github.ref }}
+          description: Deployment of master to prd
+          environment: prd
+          payload: '{"serviceName": "test-service", "namespace": "ssv"}'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          service: test

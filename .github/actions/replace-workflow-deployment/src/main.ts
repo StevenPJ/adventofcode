@@ -11,6 +11,7 @@ export async function run(): Promise<void> {
       description: core.getInput('description', {required: true}),
       token: core.getInput('token', {required: true}),
       payload: core.getInput('payload', {required: true}),
+      service: core.getInput('service', {required: true}),
     }
 
     const octo = github.getOctokit(inputs.token)
@@ -31,7 +32,7 @@ export async function run(): Promise<void> {
       ),
     )
 
-    const replacedDeployment = deployments.data.slice(0, 1).shift()
+    const replacedDeployment = deployments.data.filter(d => d.task.includes(inputs.service)).slice(0, 1).shift()
 
     if (!replacedDeployment) {
       throw Error('Could not find a deployment to replace')
