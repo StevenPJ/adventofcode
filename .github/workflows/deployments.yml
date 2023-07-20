@@ -16,8 +16,8 @@ jobs:
           token: '${{ github.token }}'
           description: "Deploying to production"
           payload: '{"serviceName": "test-service", "namespace": "ssv"}'
-          production-environment: true
-          log-url: http://my-app-url.com
+          production-environment: false
+          log-url: ${{ format('https://github.com/{0}/actions/runs/{1}/jobs/{2}', github.repository, github.run_id, github.job) }}
           environment-url: http://my-app-url.com
           environment: prd
 
