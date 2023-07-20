@@ -22,7 +22,7 @@ jobs:
           environment: prd
 
       - name: Deploy my app
-        run: exit 1
+        run: exit 0
 
       - name: Update deployment status (success)
         if: success()
