@@ -7,7 +7,10 @@ jobs:
   deploy:
     name: Deploy my app
     runs-on: ubuntu-latest
-    environment: prd
+    environment:
+      name: prod
+      url: https://github.com
+
     continue-on-error: true
     steps:
       - name: Deploy my app
@@ -18,7 +21,6 @@ jobs:
     needs: [deploy]
     steps:
       - uses: actions/checkout@v3
-      # be sure to replace with whatever version you'd like to pin to
       - uses: ./.github/actions/replace-workflow-deployment
         with:
           ref: ${{ github.ref }}

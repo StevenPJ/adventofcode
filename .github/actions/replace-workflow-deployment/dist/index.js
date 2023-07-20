@@ -48,6 +48,7 @@ function run() {
                 ref: core.getInput('ref', { required: true }),
                 description: core.getInput('description', { required: true }),
                 token: core.getInput('token', { required: true }),
+                payload: core.getInput('payload', { required: true }),
             };
             const octo = github.getOctokit(inputs.token);
             // get the deployment which was created recently with the same git ref as this run
@@ -84,6 +85,7 @@ function run() {
                 description: inputs.description,
                 environment: replacedDeployment.environment,
                 auto_merge: false,
+                payload: inputs.payload,
                 // because we are replacing an existing deployment, we don't care about status checks
                 required_contexts: [],
             });
