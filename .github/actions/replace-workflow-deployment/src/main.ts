@@ -69,7 +69,6 @@ export async function run(): Promise<void> {
       ref: inputs.ref,
       description: inputs.description,
       environment: replacedDeployment.environment,
-      environment_url: replacedDeployment.url,
       auto_merge: false,
       payload: inputs.payload,
       // because we are replacing an existing deployment, we don't care about status checks
@@ -94,6 +93,7 @@ export async function run(): Promise<void> {
         deployment_id: newDeployment.id,
         state: latestReplacedDeploymentStatus?.state ?? 'success',
         log_url: workflowUrl,
+        environment_url: latestReplacedDeploymentStatus?.environment_url,
         description: inputs.description,
         auto_inactive: true,
       })
