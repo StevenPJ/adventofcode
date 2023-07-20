@@ -47,6 +47,7 @@ jobs:
           environment-url: http://my-app-url.com
           environment: prd
           initial-status: queued
+          owner: ${{ github.author }}
 
       - name: Deploy my app
         run: exit 1
