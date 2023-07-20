@@ -8,7 +8,7 @@ jobs:
     name: Deploy my app
     runs-on: ubuntu-latest
     environment:
-      name: prod
+      name: prd
       url: https://github.com
 
     continue-on-error: true
