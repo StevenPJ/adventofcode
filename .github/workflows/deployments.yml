@@ -21,6 +21,7 @@ jobs:
           log-url: ${{ format('https://github.com/{0}/actions/runs/{1}', github.repository, github.run_id) }}
           environment-url: http://my-app-url.com
           environment: prd
+          initial-status: queued
 
       - name: Deploy my app
         run: exit 1
