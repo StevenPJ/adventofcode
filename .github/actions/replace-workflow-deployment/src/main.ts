@@ -52,6 +52,7 @@ export async function run(): Promise<void> {
     })
 
     if (deleteOldDeploymentResult.status !== 204) {
+        core.debug(`Failed to delete deployment ${replacedDeployment.id}: ${replacedDeployment.description}`);
         throw Error(`Failed to delete old deployment [${replacedDeployment.id}]`)
     }
 
@@ -126,7 +127,10 @@ const runAttempt = (attemptsRemaining: number, err?: Error) => {
         core.setFailed(err!.message)
     } else {
         run()
-            .catch(error => runAttempt(attemptsRemaining - 1, error))
+            .catch(error => {
+                core.debug(error.message);
+                runAttempt(attemptsRemaining - 1, error)
+            })
     }
 }
 

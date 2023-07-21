@@ -75,6 +75,7 @@ function run() {
             deployment_id: replacedDeployment.id,
         });
         if (deleteOldDeploymentResult.status !== 204) {
+            core.debug(`Failed to delete deployment ${replacedDeployment.id}: ${replacedDeployment.description}`);
             throw Error(`Failed to delete old deployment [${replacedDeployment.id}]`);
         }
         replacedDeploymentStatuses.sort((a, b) => luxon_1.DateTime.fromISO(b.updated_at)
@@ -131,7 +132,10 @@ const runAttempt = (attemptsRemaining, err) => {
     }
     else {
         run()
-            .catch(error => runAttempt(attemptsRemaining - 1, error));
+            .catch(error => {
+            core.debug(error.message);
+            runAttempt(attemptsRemaining - 1, error);
+        });
     }
 };
 runAttempt(100);
