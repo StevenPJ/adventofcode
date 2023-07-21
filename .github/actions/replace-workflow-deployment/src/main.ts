@@ -35,7 +35,7 @@ export async function run(): Promise<void> {
       core.info(
           `Found deployment [${d.id}(${d.updated_at}): ${JSON.stringify(d.payload)}]`,
       )
-      return d.payload === {}
+      return Object.keys(d.payload).length === 0
     }).slice(0, 1).shift()
 
     if (!replacedDeployment) {

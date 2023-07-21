@@ -62,7 +62,7 @@ function run() {
             deployments.data.forEach(d => core.info(`Found deployment [${d.id}(${d.updated_at}): ${JSON.stringify(d.payload)}]`));
             const replacedDeployment = deployments.data.filter(d => {
                 core.info(`Found deployment [${d.id}(${d.updated_at}): ${JSON.stringify(d.payload)}]`);
-                return d.payload === {};
+                return Object.keys(d.payload).length === 0;
             }).slice(0, 1).shift();
             if (!replacedDeployment) {
                 throw Error('Could not find a deployment to replace');
