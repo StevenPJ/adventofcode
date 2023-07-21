@@ -21,6 +21,8 @@ jobs:
           log-url: http://my-app-url.com
           environment-url: http://my-app-url.com
           environment: prd
+          auto-inactive: true
+
       - name: Deploy my app
         run: exit 0
 
@@ -61,6 +63,7 @@ jobs:
           log-url: http://my-app-url.com
           environment-url: http://my-app-url.com
           environment: prd
+          auto-inactive: true
 
       - name: Deploy my app
         run: exit 1
