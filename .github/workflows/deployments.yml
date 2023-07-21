@@ -10,10 +10,37 @@ jobs:
     environment:
       name: prd
       url: https://github.com/one
-    continue-on-error: true
     steps:
+      - uses: chrnorm/deployment-action@v2
+        id: deployment
+        with:
+          token: '${{ github.token }}'
+          description: "Deploying to production"
+          payload: '{"serviceName": "test-service", "namespace": "ssv"}'
+          production-environment: true
+          log-url: http://my-app-url.com
+          environment-url: http://my-app-url.com
+          environment: prd
       - name: Deploy my app
         run: exit 0
+
+      - name: Update deployment status (success)
+        if: success()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'success'
+
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'failure'
 
 
   deploy-test:
@@ -23,7 +50,35 @@ jobs:
       name: prd
       url: https://github.com/test
 
-    continue-on-error: true
     steps:
+      - uses: chrnorm/deployment-action@v2
+        id: deployment
+        with:
+          token: '${{ github.token }}'
+          description: "Deploying to production"
+          payload: '{"serviceName": "test-service", "namespace": "ssv"}'
+          production-environment: true
+          log-url: http://my-app-url.com
+          environment-url: http://my-app-url.com
+          environment: prd
+
       - name: Deploy my app
         run: exit 1
+
+      - name: Update deployment status (success)
+        if: success()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'success'
+
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'failure'
