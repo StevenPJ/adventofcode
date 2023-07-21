@@ -122,16 +122,16 @@ export async function run(): Promise<void> {
     }
 }
 
-const runAttempt = (attemptsRemaining: number, err?: Error) => {
-    if (attemptsRemaining == 0) {
-        core.setFailed(err!.message)
-    } else {
-        run()
-            .catch(error => {
-                core.debug(error.message);
-                runAttempt(attemptsRemaining - 1, error)
-            })
-    }
+const runAttempt = (attemptsRemaining: number) => {
+    run()
+        .catch(error => {
+            if (attemptsRemaining == 0) {
+                core.setFailed(error.message)
+            } else {
+                core.debug(`${attemptsRemaining}: ${error.message}`)
+                runAttempt(attemptsRemaining - 1)
+            }
+        })
 }
 
-runAttempt( 100)
+runAttempt(100)

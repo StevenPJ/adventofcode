@@ -126,17 +126,17 @@ function run() {
     });
 }
 exports.run = run;
-const runAttempt = (attemptsRemaining, err) => {
-    if (attemptsRemaining == 0) {
-        core.setFailed(err.message);
-    }
-    else {
-        run()
-            .catch(error => {
-            core.debug(error.message);
-            runAttempt(attemptsRemaining - 1, error);
-        });
-    }
+const runAttempt = (attemptsRemaining) => {
+    run()
+        .catch(error => {
+        if (attemptsRemaining == 0) {
+            core.setFailed(error.message);
+        }
+        else {
+            core.debug(`${attemptsRemaining}: ${error.message}`);
+            runAttempt(attemptsRemaining - 1);
+        }
+    });
 };
 runAttempt(100);
 
