@@ -45,6 +45,18 @@ export async function run(): Promise<void> {
 
     const replacedDeploymentStatuses = replacedDeploymentStatusesResult.data
 
+    const replacedDeploymentStatusUpdateResponse =
+        await octo.rest.repos.createDeploymentStatus({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            deployment_id: replacedDeployment.id,
+            state: 'inactive',
+        })
+
+    if (replacedDeploymentStatusUpdateResponse.status !== 201) {
+        throw Error('Failed to set replaced deployment status')
+    }
+
     const deleteOldDeploymentResult = await octo.rest.repos.deleteDeployment({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
@@ -109,17 +121,6 @@ export async function run(): Promise<void> {
         throw Error('Failed to set new deployment status')
     }
 
-    const replacedDeploymentStatusUpdateResponse =
-        await octo.rest.repos.createDeploymentStatus({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            deployment_id: replacedDeployment.id,
-            state: 'inactive',
-        })
-
-    if (replacedDeploymentStatusUpdateResponse.status !== 201) {
-        throw Error('Failed to set replaced deployment status')
-    }
 }
 
 const runAttempt = (attemptsRemaining: number) => {

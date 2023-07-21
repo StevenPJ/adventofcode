@@ -13,7 +13,7 @@ jobs:
     continue-on-error: true
     steps:
       - name: Deploy my app
-        run: exit 1
+        run: exit 0
 
   clean_up_deploy:
     runs-on: ubuntu-latest

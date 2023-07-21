@@ -69,6 +69,15 @@ function run() {
             deployment_id: replacedDeployment.id,
         });
         const replacedDeploymentStatuses = replacedDeploymentStatusesResult.data;
+        const replacedDeploymentStatusUpdateResponse = yield octo.rest.repos.createDeploymentStatus({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            deployment_id: replacedDeployment.id,
+            state: 'inactive',
+        });
+        if (replacedDeploymentStatusUpdateResponse.status !== 201) {
+            throw Error('Failed to set replaced deployment status');
+        }
         const deleteOldDeploymentResult = yield octo.rest.repos.deleteDeployment({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
@@ -113,15 +122,6 @@ function run() {
         });
         if (newDeploymentStatusUpdateResponse.status !== 201) {
             throw Error('Failed to set new deployment status');
-        }
-        const replacedDeploymentStatusUpdateResponse = yield octo.rest.repos.createDeploymentStatus({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            deployment_id: replacedDeployment.id,
-            state: 'inactive',
-        });
-        if (replacedDeploymentStatusUpdateResponse.status !== 201) {
-            throw Error('Failed to set replaced deployment status');
         }
     });
 }
