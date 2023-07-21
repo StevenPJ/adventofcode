@@ -31,7 +31,12 @@ export async function run(): Promise<void> {
       ),
     )
 
-    const replacedDeployment = deployments.data.filter(d => d.payload === {}).slice(0, 1).shift()
+    const replacedDeployment = deployments.data.filter(d => {
+      core.info(
+          `Found deployment [${d.id}(${d.updated_at}): ${JSON.stringify(d.payload)}]`,
+      )
+      return d.payload === {}
+    }).slice(0, 1).shift()
 
     if (!replacedDeployment) {
       throw Error('Could not find a deployment to replace')
