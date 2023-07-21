@@ -121,17 +121,13 @@ export async function run(): Promise<void> {
     }
 }
 
-var maxAttempts = 100
-while (true) {
-    try {
-        core.info(`Attempt {maxAttempts}`)
+const runAttempt = (attemptsRemaining: number, err?: Error) => {
+    if (attemptsRemaining == 0) {
+        core.setFailed(err!.message)
+    } else {
         run()
-        break;
-    } catch (error) {
-        if (maxAttempts === 0) {
-            if (error instanceof Error) core.setFailed(error.message)
-        } else
-            maxAttempts--
+            .catch(error => runAttempt(attemptsRemaining - 1, error))
     }
 }
 
+runAttempt( 100)

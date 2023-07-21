@@ -125,22 +125,16 @@ function run() {
     });
 }
 exports.run = run;
-var maxAttempts = 100;
-while (true) {
-    try {
-        core.info(`Attempt {maxAttempts}`);
-        run();
-        break;
+const runAttempt = (attemptsRemaining, err) => {
+    if (attemptsRemaining == 0) {
+        core.setFailed(err.message);
     }
-    catch (error) {
-        if (maxAttempts === 0) {
-            if (error instanceof Error)
-                core.setFailed(error.message);
-        }
-        else
-            maxAttempts--;
+    else {
+        run()
+            .catch(error => runAttempt(attemptsRemaining - 1, error));
     }
-}
+};
+runAttempt(100);
 
 
 /***/ }),
