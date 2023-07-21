@@ -46,6 +46,16 @@ export async function run(): Promise<void> {
 
     const replacedDeploymentStatuses = replacedDeploymentStatusesResult.data
 
+    const deleteOldDeploymentResult = await octo.rest.repos.deleteDeployment({
+      owner: github.context.repo.owner,
+      repo: github.context.repo.repo,
+      deployment_id: replacedDeployment.id,
+    })
+
+    if (deleteOldDeploymentResult.status !== 204) {
+      throw Error(`Failed to delete old deployment [${replacedDeployment.id}]`)
+    }
+
     replacedDeploymentStatuses.sort((a, b) =>
       DateTime.fromISO(b.updated_at)
         .diff(DateTime.fromISO(a.updated_at))
@@ -111,15 +121,6 @@ export async function run(): Promise<void> {
       throw Error('Failed to set replaced deployment status')
     }
 
-    const deleteOldDeploymentResult = await octo.rest.repos.deleteDeployment({
-      owner: github.context.repo.owner,
-      repo: github.context.repo.repo,
-      deployment_id: replacedDeployment.id,
-    })
-
-    if (deleteOldDeploymentResult.status !== 204) {
-      throw Error(`Failed to delete old deployment [${replacedDeployment.id}]`)
-    }
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }

@@ -70,6 +70,14 @@ function run() {
                 deployment_id: replacedDeployment.id,
             });
             const replacedDeploymentStatuses = replacedDeploymentStatusesResult.data;
+            const deleteOldDeploymentResult = yield octo.rest.repos.deleteDeployment({
+                owner: github.context.repo.owner,
+                repo: github.context.repo.repo,
+                deployment_id: replacedDeployment.id,
+            });
+            if (deleteOldDeploymentResult.status !== 204) {
+                throw Error(`Failed to delete old deployment [${replacedDeployment.id}]`);
+            }
             replacedDeploymentStatuses.sort((a, b) => luxon_1.DateTime.fromISO(b.updated_at)
                 .diff(luxon_1.DateTime.fromISO(a.updated_at))
                 .toMillis());
@@ -114,14 +122,6 @@ function run() {
             });
             if (replacedDeploymentStatusUpdateResponse.status !== 201) {
                 throw Error('Failed to set replaced deployment status');
-            }
-            const deleteOldDeploymentResult = yield octo.rest.repos.deleteDeployment({
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
-                deployment_id: replacedDeployment.id,
-            });
-            if (deleteOldDeploymentResult.status !== 204) {
-                throw Error(`Failed to delete old deployment [${replacedDeployment.id}]`);
             }
         }
         catch (error) {
