@@ -121,9 +121,10 @@ export async function run(): Promise<void> {
     }
 }
 
-var maxAttempts = 10
+var maxAttempts = 100
 while (true) {
     try {
+        core.info(`Attempt {maxAttempts}`)
         run()
         break;
     } catch (error) {

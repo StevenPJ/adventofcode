@@ -42,98 +42,93 @@ const luxon_1 = __nccwpck_require__(8811);
 function run() {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const inputs = {
-                environment: core.getInput('environment', { required: true }),
-                ref: core.getInput('ref', { required: true }),
-                description: core.getInput('description', { required: true }),
-                token: core.getInput('token', { required: true }),
-                payload: core.getInput('payload', { required: true }),
-            };
-            const octo = github.getOctokit(inputs.token);
-            // get the deployment which was created recently with the same git ref as this run
-            const deployments = yield octo.rest.repos.listDeployments({
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
-                sha: github.context.sha,
-                environment: inputs.environment,
-            });
-            core.debug(`Fetched ${deployments.data.length} deployments`);
-            deployments.data.forEach(d => core.info(`Found deployment [${d.id}(${d.updated_at}): ${JSON.stringify(d.payload)}]`));
-            const replacedDeployment = deployments.data.filter(d => Object.keys(d.payload).length === 0).slice(0, 1).shift();
-            if (!replacedDeployment) {
-                throw Error('Could not find a deployment to replace');
-            }
-            const replacedDeploymentStatusesResult = yield octo.rest.repos.listDeploymentStatuses({
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
-                deployment_id: replacedDeployment.id,
-            });
-            const replacedDeploymentStatuses = replacedDeploymentStatusesResult.data;
-            const deleteOldDeploymentResult = yield octo.rest.repos.deleteDeployment({
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
-                deployment_id: replacedDeployment.id,
-            });
-            if (deleteOldDeploymentResult.status !== 204) {
-                throw Error(`Failed to delete old deployment [${replacedDeployment.id}]`);
-            }
-            replacedDeploymentStatuses.sort((a, b) => luxon_1.DateTime.fromISO(b.updated_at)
-                .diff(luxon_1.DateTime.fromISO(a.updated_at))
-                .toMillis());
-            const latestReplacedDeploymentStatus = replacedDeploymentStatuses.shift();
-            core.info(`Replacing deployment ${replacedDeployment.id}: ${replacedDeployment.description}`);
-            // create a new deployment for the target environment
-            const newDeploymentResponse = yield octo.rest.repos.createDeployment({
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
-                ref: inputs.ref,
-                description: inputs.description,
-                environment: replacedDeployment.environment,
-                auto_merge: false,
-                payload: inputs.payload,
-                // because we are replacing an existing deployment, we don't care about status checks
-                required_contexts: [],
-            });
-            if (newDeploymentResponse.status !== 201) {
-                core.debug(`Create new deployment returned ${newDeploymentResponse.status}: ${newDeploymentResponse.data}`);
-                throw Error('Failed to create a new deployment');
-            }
-            const newDeployment = newDeploymentResponse.data;
-            core.setOutput('deployment_id', newDeployment.id);
-            const newDeploymentStatusUpdateResponse = yield octo.rest.repos.createDeploymentStatus({
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
-                deployment_id: newDeployment.id,
-                state: (_a = latestReplacedDeploymentStatus === null || latestReplacedDeploymentStatus === void 0 ? void 0 : latestReplacedDeploymentStatus.state) !== null && _a !== void 0 ? _a : 'success',
-                log_url: latestReplacedDeploymentStatus === null || latestReplacedDeploymentStatus === void 0 ? void 0 : latestReplacedDeploymentStatus.log_url,
-                environment_url: latestReplacedDeploymentStatus === null || latestReplacedDeploymentStatus === void 0 ? void 0 : latestReplacedDeploymentStatus.environment_url,
-                description: inputs.description,
-                auto_inactive: true,
-            });
-            if (newDeploymentStatusUpdateResponse.status !== 201) {
-                throw Error('Failed to set new deployment status');
-            }
-            const replacedDeploymentStatusUpdateResponse = yield octo.rest.repos.createDeploymentStatus({
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
-                deployment_id: replacedDeployment.id,
-                state: 'inactive',
-            });
-            if (replacedDeploymentStatusUpdateResponse.status !== 201) {
-                throw Error('Failed to set replaced deployment status');
-            }
+        const inputs = {
+            environment: core.getInput('environment', { required: true }),
+            ref: core.getInput('ref', { required: true }),
+            description: core.getInput('description', { required: true }),
+            token: core.getInput('token', { required: true }),
+            payload: core.getInput('payload', { required: true }),
+        };
+        const octo = github.getOctokit(inputs.token);
+        // get the deployment which was created recently with the same git ref as this run
+        const deployments = yield octo.rest.repos.listDeployments({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            sha: github.context.sha,
+            environment: inputs.environment,
+        });
+        core.debug(`Fetched ${deployments.data.length} deployments`);
+        deployments.data.forEach(d => core.info(`Found deployment [${d.id}(${d.updated_at}): ${JSON.stringify(d.payload)}]`));
+        const replacedDeployment = deployments.data.filter(d => Object.keys(d.payload).length === 0).slice(0, 1).shift();
+        if (!replacedDeployment) {
+            throw Error('Could not find a deployment to replace');
         }
-        catch (error) {
-            if (error instanceof Error)
-                core.setFailed(error.message);
+        const replacedDeploymentStatusesResult = yield octo.rest.repos.listDeploymentStatuses({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            deployment_id: replacedDeployment.id,
+        });
+        const replacedDeploymentStatuses = replacedDeploymentStatusesResult.data;
+        const deleteOldDeploymentResult = yield octo.rest.repos.deleteDeployment({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            deployment_id: replacedDeployment.id,
+        });
+        if (deleteOldDeploymentResult.status !== 204) {
+            throw Error(`Failed to delete old deployment [${replacedDeployment.id}]`);
+        }
+        replacedDeploymentStatuses.sort((a, b) => luxon_1.DateTime.fromISO(b.updated_at)
+            .diff(luxon_1.DateTime.fromISO(a.updated_at))
+            .toMillis());
+        const latestReplacedDeploymentStatus = replacedDeploymentStatuses.shift();
+        core.info(`Replacing deployment ${replacedDeployment.id}: ${replacedDeployment.description}`);
+        // create a new deployment for the target environment
+        const newDeploymentResponse = yield octo.rest.repos.createDeployment({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            ref: inputs.ref,
+            description: inputs.description,
+            environment: replacedDeployment.environment,
+            auto_merge: false,
+            payload: inputs.payload,
+            // because we are replacing an existing deployment, we don't care about status checks
+            required_contexts: [],
+        });
+        if (newDeploymentResponse.status !== 201) {
+            core.debug(`Create new deployment returned ${newDeploymentResponse.status}: ${newDeploymentResponse.data}`);
+            throw Error('Failed to create a new deployment');
+        }
+        const newDeployment = newDeploymentResponse.data;
+        core.setOutput('deployment_id', newDeployment.id);
+        const newDeploymentStatusUpdateResponse = yield octo.rest.repos.createDeploymentStatus({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            deployment_id: newDeployment.id,
+            state: (_a = latestReplacedDeploymentStatus === null || latestReplacedDeploymentStatus === void 0 ? void 0 : latestReplacedDeploymentStatus.state) !== null && _a !== void 0 ? _a : 'success',
+            log_url: latestReplacedDeploymentStatus === null || latestReplacedDeploymentStatus === void 0 ? void 0 : latestReplacedDeploymentStatus.log_url,
+            environment_url: latestReplacedDeploymentStatus === null || latestReplacedDeploymentStatus === void 0 ? void 0 : latestReplacedDeploymentStatus.environment_url,
+            description: inputs.description,
+            auto_inactive: true,
+        });
+        if (newDeploymentStatusUpdateResponse.status !== 201) {
+            throw Error('Failed to set new deployment status');
+        }
+        const replacedDeploymentStatusUpdateResponse = yield octo.rest.repos.createDeploymentStatus({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            deployment_id: replacedDeployment.id,
+            state: 'inactive',
+        });
+        if (replacedDeploymentStatusUpdateResponse.status !== 201) {
+            throw Error('Failed to set replaced deployment status');
         }
     });
 }
 exports.run = run;
-var maxAttempts = 10;
+var maxAttempts = 100;
 while (true) {
     try {
+        core.info(`Attempt {maxAttempts}`);
         run();
         break;
     }
