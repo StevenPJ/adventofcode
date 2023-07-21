@@ -17,9 +17,6 @@ inputs:
   payload:
     required: true
     description: 'The payload to add to the deployment'
-  service:
-    required: true
-    description: 'The name of the service being deployed'
 runs:
   using: 'node16'
   main: 'dist/index.js'

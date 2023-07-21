@@ -11,7 +11,6 @@ export async function run(): Promise<void> {
       description: core.getInput('description', {required: true}),
       token: core.getInput('token', {required: true}),
       payload: core.getInput('payload', {required: true}),
-      service: core.getInput('service', {required: true}),
     }
 
     const octo = github.getOctokit(inputs.token)
@@ -28,7 +27,7 @@ export async function run(): Promise<void> {
 
     deployments.data.forEach(d =>
       core.info(
-        `Found deployment [${d.id}(${d.updated_at}): ${d}]`,
+        `Found deployment [${d.id}(${d.updated_at}): ${d.payload}]`,
       ),
     )
 

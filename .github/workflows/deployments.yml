@@ -28,7 +28,6 @@ jobs:
           environment: prd
           payload: '{"serviceName": "test-service", "namespace": "ssv"}'
           token: ${{ secrets.GITHUB_TOKEN }}
-          service: one
 
 
   deploy-test:
@@ -55,4 +54,3 @@ jobs:
           environment: prd
           payload: '{"serviceName": "test-service", "namespace": "ssv"}'
           token: ${{ secrets.GITHUB_TOKEN }}
-          service: test
