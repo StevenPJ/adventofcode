@@ -60,10 +60,7 @@ function run() {
             });
             core.debug(`Fetched ${deployments.data.length} deployments`);
             deployments.data.forEach(d => core.info(`Found deployment [${d.id}(${d.updated_at}): ${JSON.stringify(d.payload)}]`));
-            const replacedDeployment = deployments.data.filter(d => {
-                core.info(`Found deployment [${d.id}(${d.updated_at}): ${JSON.stringify(d.payload)}]`);
-                return Object.keys(d.payload).length === 0;
-            }).slice(0, 1).shift();
+            const replacedDeployment = deployments.data.filter(d => Object.keys(d.payload).length === 0).slice(0, 1).shift();
             if (!replacedDeployment) {
                 throw Error('Could not find a deployment to replace');
             }
@@ -79,8 +76,6 @@ function run() {
             const latestReplacedDeploymentStatus = replacedDeploymentStatuses.shift();
             core.info(`Replacing deployment ${replacedDeployment.id}: ${replacedDeployment.description}`);
             // create a new deployment for the target environment
-            // https://github.com/kylebjordahl/replace-workflow-deployment/actions/runs/4012266800/jobs/6890573893
-            const workflowUrl = `${github.context.serverUrl}/${github.context.repo.owner}/${github.context.repo.repo}/runs/${github.context.runId}`;
             const newDeploymentResponse = yield octo.rest.repos.createDeployment({
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
@@ -136,7 +131,21 @@ function run() {
     });
 }
 exports.run = run;
-run();
+var maxAttempts = 10;
+while (true) {
+    try {
+        run();
+        break;
+    }
+    catch (error) {
+        if (maxAttempts === 0) {
+            if (error instanceof Error)
+                core.setFailed(error.message);
+        }
+        else
+            maxAttempts--;
+    }
+}
 
 
 /***/ }),
