@@ -44,6 +44,12 @@ class SelectorTest {
         assertThat(testSolution.solutions()).containsExactly(new LatestSolution());
     }
 
+    @Test
+    void shouldReturnAllSolutionsInYearInOrder() {
+        assertThat(new Selector.Year(4000).solutions())
+                .containsSequence(new LatestSolution(), new SecondLatestSolution());
+    }
+
     static class FirstSolution extends Solution {
 
         @Override
@@ -90,6 +96,18 @@ class SelectorTest {
         @Override
         public int day() {
             return 2;
+        }
+    }
+
+    static class SecondLatestSolution extends Solution {
+        @Override
+        public int year() {
+            return 4000;
+        }
+
+        @Override
+        public int day() {
+            return 1;
         }
     }
 

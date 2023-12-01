@@ -44,6 +44,10 @@ public abstract class Solution implements Comparable<Solution> {
         return this.year() == year && this.day() == day;
     }
 
+    public boolean matches(int year) {
+        return this.year() == year;
+    }
+
     @Override
     public int compareTo(Solution other) {
         if (this.year() != other.year()) {

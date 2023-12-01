@@ -62,4 +62,21 @@ interface Selector {
         }
     }
 
+    @Value
+    @AllArgsConstructor
+    class Year implements Selector {
+        int year;
+
+        public Year(String year) {
+            this.year = Integer.parseInt(year);
+        }
+
+        @Override
+        public List<Solution> solutions() {
+            return new All().solutions().stream()
+                    .filter(solution -> solution.matches(this.year))
+                    .toList();
+        }
+    }
+
 }

@@ -49,4 +49,11 @@ class ParserTest {
         assertThatExceptionOfType(RuntimeException.class)
                 .isThrownBy(() -> parser.parse(new String[]{"2022", "02", "extra"}));
     }
+
+    @Test
+    void shouldReturnYear() {
+        var actual = parser.parse(new String[]{"2023"});
+
+        assertThat(actual).isEqualTo(new Selector.Year(2023));
+    }
 }
