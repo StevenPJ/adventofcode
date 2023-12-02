@@ -8,36 +8,31 @@ class Day2 : Solution() {
     override fun part1(input: String): Int {
         return input.splitIgnoreEmpty("\n")
                 .filter {
-                    it.drop(it.indexOf(":") + 1 )
+                    it
                             .splitIgnoreEmpty(";")
                             .none { subset ->
                                 parseBallsFromSubset(subset, "red") > 12
                                         || parseBallsFromSubset(subset, "blue") > 14
                                         || parseBallsFromSubset(subset, "green") > 13
                             }
-                }
-                .map {
+                }.sumOf {
                     val regex = """Game (\d+): .*""".toRegex()
                     val matchResult = regex.find(it)
                     val (game) = matchResult!!.destructured
                     game.toInt()
                 }
-                .sum()
     }
 
     override fun part2(input: String): Int {
         return input.splitIgnoreEmpty("\n")
-                .map { minBallsFromGame(it, "red") * minBallsFromGame(it, "green") * minBallsFromGame(it, "blue") }
-                .sum()
+                .sumOf { minBallsFromGame(it, "red") * minBallsFromGame(it, "green") * minBallsFromGame(it, "blue") }
     }
 
     private fun minBallsFromGame(game: String, colour: String): Int {
-        return game.drop(game.indexOf(":") + 1 )
+        return game
                 .splitIgnoreEmpty(";")
-                .map{parseBallsFromSubset(it, colour)}
-                .max()
+                .maxOf { parseBallsFromSubset(it, colour) }
     }
-
 
     private fun parseBallsFromSubset(subset: String, colour: String): Int {
         val regex = """(\d+) ${colour}""".toRegex()
