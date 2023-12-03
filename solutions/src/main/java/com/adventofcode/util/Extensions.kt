@@ -7,6 +7,10 @@ fun CharSequence.splitIgnoreEmpty(vararg delimiters: String): List<String> {
     }
 }
 
+fun CharSequence.nonEmptyLines(): List<String> {
+    return this.splitIgnoreEmpty("\n")
+}
+
 fun <T> List<T>.eachPermutation(): Sequence<List<T>> =
     if (this.isEmpty()) sequenceOf(emptyList())
     else {
