@@ -29,10 +29,10 @@ class Day3 : Solution() {
         val symbols = mutableListOf<Point>()
         lines
                 .map { Regex(exclusionPattern).replace(it," ") }
-                .forEachIndexed{ col, it ->
-                    it.toCharArray().forEachIndexed { row, it ->
-                        if (!it.isWhitespace())
-                            symbols.add(Point(row, col))
+                .forEachIndexed{ colIdx, col ->
+                    col.toCharArray().forEachIndexed { rowIdx, row ->
+                        if (!row.isWhitespace())
+                            symbols.add(Point(rowIdx, colIdx))
                     }}
         return symbols
     }

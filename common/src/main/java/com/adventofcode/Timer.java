@@ -10,10 +10,15 @@ class Timer {
     public String elapsed() {
         var duration =  Duration.between(this.start, Instant.now());
         if (duration.toSeconds() > 1000) {
-            return duration.toMillis() + "m";
+            return duration.toMinutes() + "m";
         }
         if (duration.toMillis() > 1000)
             return duration.toSeconds() + "s";
+
+        if (duration.toMillis() < 1) {
+            return duration.toNanos() / 1000 + "µs";
+        }
+
         return duration.toMillis() + "ms";
     }
 
