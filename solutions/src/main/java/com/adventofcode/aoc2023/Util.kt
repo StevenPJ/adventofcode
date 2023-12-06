@@ -1,5 +1,7 @@
 package com.adventofcode.aoc2023
 
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.sqrt
 
 class Dimensions(private val width: Int, private val height: Int) {
@@ -64,5 +66,19 @@ fun solveQuadratic(aIn: Number, bIn: Number, cIn: Number): Pair<Double, Double> 
 
         return Pair(realPart + imaginaryPart, realPart - imaginaryPart)
     }
+}
 
+fun LongRange.increases() : Boolean {
+    return this.last > this.first
+}
+
+fun LongRange.intersect(other: LongRange) : Triple<LongRange?, LongRange?, LongRange?> {
+    val intersection = max(this.first, other.first).. min(this.last, other.last)
+    val tooSmall = this.first .. min(this.last, other.first)
+    val tooBig = max(this.first, other.last) .. this.last
+    return Triple(
+            if (tooSmall.increases()) tooSmall else null,
+            if (intersection.increases()) intersection else null,
+            if (tooBig.increases()) tooBig else null,
+    )
 }

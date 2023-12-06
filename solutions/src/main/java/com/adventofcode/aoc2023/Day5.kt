@@ -55,16 +55,10 @@ class Day5 : Solution() {
                 for ((dst, src) in map) {
                     val unmapped = mutableListOf<LongRange>()
                     while (mapInputs.isNotEmpty()) {
-                        val interval = mapInputs.removeFirst()
-                        val intersection = max(interval.first, src.first).. min(interval.last, src.last)
-                        val tooSmall = interval.first .. min(interval.last, src.first)
-                        val tooBig = max(interval.first, src.last) .. interval.last
-                        if (intersection.last > intersection.first)
-                            mapped.add((intersection.first - src.first + dst.first) .. intersection.last - src.first + dst.first)
-                        if (tooSmall.last > tooSmall.first)
-                            unmapped.add(tooSmall)
-                        if (tooBig.last > tooBig.first)
-                            unmapped.add(tooBig)
+                        val (tooSmall, intersection, tooBig) = mapInputs.removeFirst().intersect(src)
+                        intersection?.let { mapped += (it.first - src.first + dst.first)..((it.last - src.first) + dst.first)}
+                        tooSmall?.let { unmapped += it}
+                        tooBig?.let { unmapped += it}
                     }
                     // process only unmapped entries for the next row
                     mapInputs = unmapped
