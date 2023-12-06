@@ -19,7 +19,7 @@ class Day6 : Solution() {
         return times
                 .mapIndexed{ idx, time ->
                     // solve the inequality
-                    val roots = completeTheSquare(-1, time, -distances[idx])
+                    val roots = solveQuadratic(-1, time, -distances[idx])
                     // return number of integers between the roots
                     (ceil(max(roots.first, roots.second) - 1) - floor(min(roots.first, roots.second))).toInt()
                 }

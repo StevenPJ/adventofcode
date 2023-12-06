@@ -37,7 +37,7 @@ fun List<String>.charAt(p: Point): Char {
     return this[p.y][p.x]
 }
 
-fun completeTheSquare(aIn: Number, bIn: Number, cIn: Number): Pair<Double, Double> {
+fun solveQuadratic(aIn: Number, bIn: Number, cIn: Number): Pair<Double, Double> {
     val a = aIn.toDouble()
     val b = bIn.toDouble()
     val c = cIn.toDouble()
