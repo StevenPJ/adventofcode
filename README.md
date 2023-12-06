@@ -5,20 +5,20 @@
 ## Solutions
 ```
 ----- 2023, Day 1 -----
-  42ms Part 1: 55029
+  45ms Part 1: 55029
   11ms Part 2: 55686
 ----- 2023, Day 2 -----
-  17ms Part 1: 2551
+  16ms Part 1: 2551
    9ms Part 2: 62811
 ----- 2023, Day 3 -----
-  39ms Part 1: 550934
-  15ms Part 2: 81997870
+  51ms Part 1: 550934
+  36ms Part 2: 81997870
 ----- 2023, Day 4 -----
-   4ms Part 1: 23847
-   5ms Part 2: 8570000
+   3ms Part 1: 23847
+   4ms Part 2: 8570000
 ----- 2023, Day 5 -----
-   4ms Part 1: 836040384
-  14ms Part 2: 10834440
+   8ms Part 1: 836040384
+  23ms Part 2: 10834440
 ----- 2023, Day 6 -----
    0ms Part 1: 4811940
    0ms Part 2: 30077773
