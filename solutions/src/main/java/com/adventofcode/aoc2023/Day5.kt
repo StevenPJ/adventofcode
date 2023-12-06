@@ -44,7 +44,7 @@ class Day5 : Solution() {
                     val unmapped = mutableListOf<LongRange>()
                     while (mapInputs.isNotEmpty()) {
                         val (tooSmall, intersection, tooBig) = mapInputs.removeFirst().intersect(src)
-                        intersection?.let { mapped += (it.first - src.first + dst.first)..((it.last - src.first) + dst.first)}
+                        intersection?.let { mapped += (it.first - src.first + dst.first)..(it.last - src.first + dst.first)}
                         tooSmall?.let { unmapped += it}
                         tooBig?.let { unmapped += it}
                     }
