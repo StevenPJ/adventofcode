@@ -1,5 +1,7 @@
 package com.adventofcode.aoc2023
 
+import com.adventofcode.util.nonEmptyLines
+import com.adventofcode.util.splitIgnoreEmpty
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sqrt
@@ -99,3 +101,16 @@ fun String.match(expression: Regex): MatchResult.Destructured? {
 fun MatchResult.Destructured?.toInt() : Int {
     return this?.component1()?.toInt() ?: 0
 }
+
+fun String.toNumbers(): List<List<Long>> {
+    return this.nonEmptyLines().map { line -> line.split("\\D+".toRegex()).filter { it.isNotEmpty() }.map { it.trim().toLong() }}.filter { it.isNotEmpty() }
+}
+
+fun Long.toDigits(): List<Long> = toString().map { it.toString().toLong() }
+
+fun <T> List<T>.firstAndLast(): List<T> = this.slice(setOf(0, this.size - 1))
+fun List<Long>.toDigits(): List<Long> = this.flatMap { it.toDigits() }
+fun List<Long>.toNumber() : Long = "${this.first()}${this.last()}".toLong()
+fun String.splitBlocks(): List<String> = this.splitIgnoreEmpty("\n\n")
+
+fun range(start: Long, length: Long): LongRange = start until start + length

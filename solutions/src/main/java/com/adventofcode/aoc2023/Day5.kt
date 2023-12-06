@@ -1,8 +1,6 @@
 package com.adventofcode.aoc2023
 
 import com.adventofcode.Solution
-import com.adventofcode.util.nonEmptyLines
-import com.adventofcode.util.splitIgnoreEmpty
 
 class Day5 : Solution() {
 
@@ -19,16 +17,12 @@ class Day5 : Solution() {
     }
 
     private fun parse(input: String, asRanges: Boolean): Pair<List<LongRange>, Almanac> {
-        val seedsAndMaps = input.splitIgnoreEmpty("\n\n").toMutableList()
-        val seeds = seedsAndMaps.removeAt(0).replace("seeds: ", "").split(" ").map { it.toLong() }
-        val almanac = seedsAndMaps.map { map -> map.nonEmptyLines().drop(1).map { row ->
-                val (src, dst, size) = row.splitIgnoreEmpty(" ").map { it.toLong() }
-                (src until src + size) to (dst until dst + size)
-            }
-        }
+        val seeds = input.toNumbers().first()
+        val almanac = input.splitBlocks().drop(1)
+                .map { it.toNumbers().map {(src, dst, size) -> range(src, size) to range(dst, size) }}
 
         return if (asRanges) {
-            val ranges = (seeds.indices step 2).map { seeds[it] until seeds[it] + seeds[it + 1] }
+            val ranges = seeds.windowed(2, 2).map { (start, length) -> range(start, length) }
             Pair(ranges, almanac)
         } else {
             Pair(seeds.map { it..it }, almanac)

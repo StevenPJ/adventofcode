@@ -11,11 +11,7 @@ import kotlin.math.min
 class Day6 : Solution() {
 
     override fun part1(input: String): Int {
-        val (times, distances) = input
-                .replace("Time:", "")
-                .replace("Distance:", "")
-                .nonEmptyLines()
-                .map { it.splitIgnoreEmpty(" ").map { it.toLong() } }
+        val (times, distances) = input.toNumbers()
         return times
                 .mapIndexed{ idx, time ->
                     // solve the inequality

@@ -6,17 +6,12 @@ import com.adventofcode.util.splitIgnoreEmpty
 
 class Day1 : Solution() {
 
-    override fun part1(input: String): Int {
-        return input.nonEmptyLines()
-                .map { it.filter { it.isDigit() } }
-                .map { it.toCharArray() }
-                .map { String.format("%s%s", it.first(), it.last())}
-                .map { it.toInt() }
-                .sum()
+    override fun part1(input: String): Long {
+        return input.toNumbers().sumOf { it.toDigits().firstAndLast().toNumber() }
     }
 
     // handle overlapping numbers by leaving the number behind for the next one.
-    override fun part2(input: String): Int {
+    override fun part2(input: String): Long {
         return part1(input
                 .replace("one", "one1one")
                 .replace("two", "two2two")
