@@ -73,7 +73,15 @@ fun LongRange.increases() : Boolean {
 }
 
 fun LongRange.intersect(other: LongRange) : Triple<LongRange?, LongRange?, LongRange?> {
-    val intersection = max(this.first, other.first).. min(this.last, other.last)
+    // handle ranges of size 1
+    if (this.first == this.last) {
+        return Triple(
+                if (this.first < other.first) this else null,
+                if (other.contains(this.first)) this else null,
+                if (this.first > other.last) this else null,
+        )
+    }
+    val intersection = max(this.first, other.first) .. min(this.last, other.last)
     val tooSmall = this.first .. min(this.last, other.first)
     val tooBig = max(this.first, other.last) .. this.last
     return Triple(

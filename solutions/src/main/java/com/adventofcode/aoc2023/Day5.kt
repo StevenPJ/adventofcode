@@ -3,51 +3,39 @@ package com.adventofcode.aoc2023
 import com.adventofcode.Solution
 import com.adventofcode.util.nonEmptyLines
 import com.adventofcode.util.splitIgnoreEmpty
-import kotlin.math.max
-import kotlin.math.min
 
 class Day5 : Solution() {
 
     override fun part1(input: String): Long {
-        val maps = input.splitIgnoreEmpty("\n\n").toMutableList()
-        val seeds = maps.removeAt(0).replace("seeds: ", "").split(" ").map { it.toLong() }
+        val (seedRanges, almanac) = parse(input, false)
 
-        return lowestSeedLocation(seeds, almanac(maps))
+        return lowestSeedLocation(seedRanges, almanac)
     }
 
     override fun part2(input: String): Long {
-        val maps = input.splitIgnoreEmpty("\n\n").toMutableList()
-        val seeds = maps.removeAt(0).replace("seeds: ", "").split(" ").map { it.toLong() }
-        val ranges = (seeds.indices step 2).map { seeds[it] until seeds[it] + seeds[it + 1] }
+        val (seedRanges, almanac) = parse(input, true)
 
-        return lowestSeedLocationFromRanges(ranges, almanac(maps))
+        return lowestSeedLocation(seedRanges, almanac)
     }
 
-    private fun almanac(input: List<String>): Almanac {
-        return input.map { map ->
-            map.nonEmptyLines().drop(1).map { row ->
+    private fun parse(input: String, asRanges: Boolean): Pair<List<LongRange>, Almanac> {
+        val seedsAndMaps = input.splitIgnoreEmpty("\n\n").toMutableList()
+        val seeds = seedsAndMaps.removeAt(0).replace("seeds: ", "").split(" ").map { it.toLong() }
+        val almanac = seedsAndMaps.map { map -> map.nonEmptyLines().drop(1).map { row ->
                 val (src, dst, size) = row.splitIgnoreEmpty(" ").map { it.toLong() }
                 (src until src + size) to (dst until dst + size)
             }
         }
-    }
 
-    private fun lowestSeedLocation(seeds: List<Long>, almanac: Almanac): Long {
-        return seeds.minOf{ seed ->
-            var value = seed
-            map@ for (map in almanac) {
-                for (row in map) {
-                    if (row.second.contains(value)) {
-                        value = row.first.first + value - row.second.first
-                        continue@map
-                    }
-                }
-            }
-            value
+        return if (asRanges) {
+            val ranges = (seeds.indices step 2).map { seeds[it] until seeds[it] + seeds[it + 1] }
+            Pair(ranges, almanac)
+        } else {
+            Pair(seeds.map { it..it }, almanac)
         }
     }
 
-    private fun lowestSeedLocationFromRanges(ranges: List<LongRange>, almanac: Almanac): Long {
+    private fun lowestSeedLocation(ranges: List<LongRange>, almanac: Almanac): Long {
         return ranges.minOf{ range ->
             var mapInputs = mutableListOf(range)
             for (map in almanac) {
@@ -67,7 +55,7 @@ class Day5 : Solution() {
                 mapInputs += mapped
             }
             // mapping is done, so we now have ranges of locations, and we can get the smallest
-            (mapInputs).minOf{ it.first }
+            mapInputs.minOf{ it.first }
         }
     }
 }
