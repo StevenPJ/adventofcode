@@ -48,7 +48,7 @@ class Day5 : Solution() {
     }
 
     private fun lowestSeedLocationFromRanges(ranges: List<LongRange>, almanac: Almanac): Long {
-        return ranges.fold(Long.MAX_VALUE) { minimum, range ->
+        return ranges.minOf{ range ->
             var mapInputs = mutableListOf(range)
             for (map in almanac) {
                 val mapped = mutableListOf<LongRange>()
@@ -73,7 +73,7 @@ class Day5 : Solution() {
                 mapInputs += mapped
             }
             // mapping is done, so we now have ranges of locations, and we can get the smallest
-            (mapInputs).fold(minimum) { min, r -> min(min, r.min()) }
+            (mapInputs).minOf{ it.first }
         }
     }
 }
