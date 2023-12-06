@@ -10,14 +10,14 @@ class Day5 : Solution() {
 
     override fun part1(input: String): Long {
         val maps = input.splitIgnoreEmpty("\n\n").toMutableList()
-        val seeds = maps.removeAt(0).substring(7).split(" ").map { it.toLong() }
+        val seeds = maps.removeAt(0).replace("seeds: ", "").split(" ").map { it.toLong() }
 
         return lowestSeedLocation(seeds, almanac(maps))
     }
 
     override fun part2(input: String): Long {
         val maps = input.splitIgnoreEmpty("\n\n").toMutableList()
-        val seeds = maps.removeAt(0).substring(7).split(" ").map { it.toLong() }
+        val seeds = maps.removeAt(0).replace("seeds: ", "").split(" ").map { it.toLong() }
         val ranges = (seeds.indices step 2).map { seeds[it] until seeds[it] + seeds[it + 1] }
 
         return lowestSeedLocationFromRanges(ranges, almanac(maps))
@@ -26,14 +26,14 @@ class Day5 : Solution() {
     private fun almanac(input: List<String>): Almanac {
         return input.map { map ->
             map.nonEmptyLines().drop(1).map { row ->
-                val map = row.splitIgnoreEmpty(" ").map { it.toLong() }
-                (map[0] until map[0] + map[2]) to (map[1] until map[1] + map[2])
+                val (src, dst, size) = row.splitIgnoreEmpty(" ").map { it.toLong() }
+                (src until src + size) to (dst until dst + size)
             }
         }
     }
 
     private fun lowestSeedLocation(seeds: List<Long>, almanac: Almanac): Long {
-        return seeds.fold(Long.MAX_VALUE) { lowestSeedLocation, seed ->
+        return seeds.minOf{ seed ->
             var value = seed
             map@ for (map in almanac) {
                 for (row in map) {
@@ -43,7 +43,7 @@ class Day5 : Solution() {
                     }
                 }
             }
-            if (lowestSeedLocation < value) lowestSeedLocation else value
+            value
         }
     }
 
