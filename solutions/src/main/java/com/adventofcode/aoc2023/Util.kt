@@ -90,3 +90,12 @@ fun LongRange.intersect(other: LongRange) : Triple<LongRange?, LongRange?, LongR
             if (tooBig.increases()) tooBig else null,
     )
 }
+
+fun String.match(expression: Regex): MatchResult.Destructured? {
+    val matchResult = expression.find(this) ?: return null
+    return matchResult.destructured
+}
+
+fun MatchResult.Destructured?.toInt() : Int {
+    return this?.component1()?.toInt() ?: 0
+}

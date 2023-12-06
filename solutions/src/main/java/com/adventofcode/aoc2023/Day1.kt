@@ -1,12 +1,13 @@
 package com.adventofcode.aoc2023
 
 import com.adventofcode.Solution
+import com.adventofcode.util.nonEmptyLines
 import com.adventofcode.util.splitIgnoreEmpty
 
 class Day1 : Solution() {
 
     override fun part1(input: String): Int {
-        return input.splitIgnoreEmpty("\n")
+        return input.nonEmptyLines()
                 .map { it.filter { it.isDigit() } }
                 .map { it.toCharArray() }
                 .map { String.format("%s%s", it.first(), it.last())}

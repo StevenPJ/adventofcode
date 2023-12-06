@@ -1,12 +1,13 @@
 package com.adventofcode.aoc2023
 
 import com.adventofcode.Solution
+import com.adventofcode.util.nonEmptyLines
 import com.adventofcode.util.splitIgnoreEmpty
 
 class Day2 : Solution() {
 
     override fun part1(input: String): Int {
-        return input.splitIgnoreEmpty("\n")
+        return input.nonEmptyLines()
                 .filter {
                     it
                             .splitIgnoreEmpty(";")
@@ -15,12 +16,7 @@ class Day2 : Solution() {
                                         || parseBallsFromSubset(subset, "blue") > 14
                                         || parseBallsFromSubset(subset, "green") > 13
                             }
-                }.sumOf {
-                    val regex = """Game (\d+): .*""".toRegex()
-                    val matchResult = regex.find(it)
-                    val (game) = matchResult!!.destructured
-                    game.toInt()
-                }
+                }.sumOf {  it.match("""Game (\d+): .*""".toRegex()).toInt()}
     }
 
     override fun part2(input: String): Int {
@@ -35,10 +31,6 @@ class Day2 : Solution() {
     }
 
     private fun parseBallsFromSubset(subset: String, colour: String): Int {
-        val regex = """(\d+) ${colour}""".toRegex()
-        val matchResult = regex.find(subset) ?: return 0
-        val (number) = matchResult.destructured
-        return number.toInt()
+        return subset.match("""(\d+) $colour""".toRegex()).toInt()
     }
-
 }
