@@ -79,3 +79,24 @@ fun <T> Sequence<T>.repeatIndefinitely(): Sequence<T> =
 
 fun <T> List<T>.repeatIndefinitely(): Sequence<T> =
     this.asSequence().repeatIndefinitely()
+
+fun List<Long>.lcm(): Long {
+    var result = this[0]
+    for (i in 1 until this.size) {
+        result = findLCM(result, this[i])
+    }
+    return result
+}
+
+fun findLCM(a: Long, b: Long): Long {
+    val larger = if (a > b) a else b
+    val maxLcm = a * b
+    var lcm = larger
+    while (lcm <= maxLcm) {
+        if ((lcm % a).toInt() == 0 && (lcm % b).toInt() == 0) {
+            return lcm
+        }
+        lcm += larger
+    }
+    return maxLcm
+}

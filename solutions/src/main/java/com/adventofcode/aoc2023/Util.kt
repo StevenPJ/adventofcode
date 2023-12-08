@@ -114,3 +114,8 @@ fun List<Long>.toNumber() : Long = "${this.first()}${this.last()}".toLong()
 fun String.splitBlocks(): List<String> = this.splitIgnoreEmpty("\n\n")
 
 fun range(start: Long, length: Long): LongRange = start until start + length
+
+data class Node(val name: String, private val neighbours: Pair<String, String>) {
+    fun left(nodes: List<Node>): Node = nodes.find { it.name == this.neighbours.first }!!
+    fun right(nodes: List<Node>): Node = nodes.find { it.name == this.neighbours.second }!!
+}
