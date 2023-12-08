@@ -121,7 +121,7 @@ data class Node(val name: String, private val neighbours: List<String>) {
     fun right(nodes: List<Node>): Node = nodes.find { it.name == this.neighbours.last() }!!
 }
 
-fun shortestPath(next: (current: Node) -> Node, source: Node, sinkTest: Predicate<String>): List<Node> {
+fun path(next: (current: Node) -> Node, source: Node, sinkTest: Predicate<String>): List<Node> {
     val nodes = mutableListOf(source)
     while (sinkTest.negate().test(nodes.last().name)) {
         nodes += next(nodes.last())
