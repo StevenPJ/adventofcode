@@ -12,7 +12,7 @@ class Day8 : Solution() {
     override fun part1(input: String): Long {
         val (instructions, network) = parse(input)
 
-        return pathLength(instructions, network, network.find{ it.name == "AAA"}!!) { node -> node == "ZZZ" }
+        return pathLength(instructions, network, network.find{ it.name == "AAA" }!!) { node -> node == "ZZZ" }
     }
 
     override fun part2(input: String): Long {
@@ -28,16 +28,14 @@ class Day8 : Solution() {
         val instructions = input.nonEmptyLines().first().asSequence().repeatIndefinitely()
         val network = input.nonEmptyLines().drop(1).map {
             val (name, left, right) = it.match("(\\w{3}) = \\((\\w{3}), (\\w{3})\\)".toRegex())!!
-            Node(name, Pair(left, right))
+            Node(name, listOf(left, right))
         }
         return Pair(instructions, network)
     }
 
-    private fun pathLength(instructions: Sequence<Char>, network: List<Node>, source: Node, isASink: Predicate<String>): Long {
-        var node = source
-        return instructions.map{
-            node = if (it == 'L') node.left(network) else node.right(network)
-            node.name
-        }.takeWhile { isASink.negate().test(it) }.count().toLong() + 1
+    private fun pathLength(instructions: Sequence<Char>, network: List<Node>, source: Node, sinkTest: Predicate<String>): Long {
+        val instructionItr = instructions.iterator()
+        val next: (node: Node) -> Node = { node -> if (instructionItr.next()  == 'L') node.left(network) else node.right(network) }
+        return shortestPath(next, source, sinkTest).count().toLong() - 1
     }
 }

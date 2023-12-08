@@ -2,6 +2,7 @@ package com.adventofcode.aoc2023
 
 import com.adventofcode.util.nonEmptyLines
 import com.adventofcode.util.splitIgnoreEmpty
+import java.util.function.Predicate
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sqrt
@@ -115,7 +116,15 @@ fun String.splitBlocks(): List<String> = this.splitIgnoreEmpty("\n\n")
 
 fun range(start: Long, length: Long): LongRange = start until start + length
 
-data class Node(val name: String, private val neighbours: Pair<String, String>) {
-    fun left(nodes: List<Node>): Node = nodes.find { it.name == this.neighbours.first }!!
-    fun right(nodes: List<Node>): Node = nodes.find { it.name == this.neighbours.second }!!
+data class Node(val name: String, private val neighbours: List<String>) {
+    fun left(nodes: List<Node>): Node = nodes.find { it.name == this.neighbours.first() }!!
+    fun right(nodes: List<Node>): Node = nodes.find { it.name == this.neighbours.last() }!!
+}
+
+fun shortestPath(next: (current: Node) -> Node, source: Node, sinkTest: Predicate<String>): List<Node> {
+    val nodes = mutableListOf(source)
+    while (sinkTest.negate().test(nodes.last().name)) {
+        nodes += next(nodes.last())
+    }
+    return nodes
 }
