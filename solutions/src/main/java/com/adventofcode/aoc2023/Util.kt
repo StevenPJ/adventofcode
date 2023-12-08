@@ -2,7 +2,6 @@ package com.adventofcode.aoc2023
 
 import com.adventofcode.util.nonEmptyLines
 import com.adventofcode.util.splitIgnoreEmpty
-import java.util.function.Predicate
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sqrt
@@ -121,9 +120,9 @@ data class Node(val name: String, private val neighbours: List<String>) {
     fun right(nodes: List<Node>): Node = nodes.find { it.name == this.neighbours.last() }!!
 }
 
-fun path(next: (current: Node) -> Node, source: Node, sinkTest: Predicate<String>): List<Node> {
+fun path(next: (current: Node) -> Node, source: Node, sinkTest: (Node) -> Boolean): List<Node> {
     val nodes = mutableListOf(source)
-    while (sinkTest.negate().test(nodes.last().name)) {
+    while ( !sinkTest(nodes.last()) ) {
         nodes += next(nodes.last())
     }
     return nodes

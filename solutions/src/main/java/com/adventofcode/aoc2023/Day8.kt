@@ -36,6 +36,6 @@ class Day8 : Solution() {
     private fun pathLength(instructions: Sequence<Char>, network: List<Node>, source: Node, sinkTest: Predicate<String>): Long {
         val instructionItr = instructions.iterator()
         val next: (node: Node) -> Node = { node -> if (instructionItr.next()  == 'L') node.left(network) else node.right(network) }
-        return path(next, source, sinkTest).count().toLong() - 1
+        return path(next, source) { sinkTest.test(it.name) }.count().toLong() - 1
     }
 }
