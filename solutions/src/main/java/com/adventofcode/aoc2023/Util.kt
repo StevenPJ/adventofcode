@@ -103,7 +103,7 @@ fun MatchResult.Destructured?.toInt() : Int {
 }
 
 fun String.toNumbers(): List<List<Long>> {
-    return this.nonEmptyLines().map { line -> line.split("\\D+".toRegex()).filter { it.isNotEmpty() }.map { it.trim().toLong() }}.filter { it.isNotEmpty() }
+    return this.nonEmptyLines().map { "(-?\\d+)".toRegex().findAll(it).map { it.value.toLong() }.toList() }.filter{ it.isNotEmpty() }
 }
 
 fun Long.toDigits(): List<Long> = toString().map { it.toString().toLong() }
@@ -118,12 +118,34 @@ fun range(start: Long, length: Long): LongRange = start until start + length
 data class Node(val name: String, private val neighbours: List<String>) {
     fun left(nodes: List<Node>): Node = nodes.find { it.name == this.neighbours.first() }!!
     fun right(nodes: List<Node>): Node = nodes.find { it.name == this.neighbours.last() }!!
+    fun neighbours(nodes: List<Node>): List<Node> = neighbours.map { n -> nodes.find { it.name == n }!! }
 }
 
 fun path(next: (current: Node) -> Node, source: Node, sinkTest: (Node) -> Boolean): List<Node> {
     val nodes = mutableListOf(source)
-    while ( !sinkTest(nodes.last()) ) {
+    while (!sinkTest(nodes.last())) {
         nodes += next(nodes.last())
     }
     return nodes
+}
+
+fun List<Node>.shortestPath(source: String): Map<String, Int> {
+    var unsettled = ArrayDeque(listOf(source))
+    val settled = mutableListOf<String>()
+    val paths = hashMapOf(source to 0).withDefault { Int.MAX_VALUE }
+    while (!unsettled.isEmpty()) {
+        val evaluation = unsettled.removeFirst()
+        this.find { it.name == evaluation }!!.neighbours(this).forEach {
+            if (!settled.contains(it.name)) {
+                val sourceDistance: Int = paths[evaluation] ?: Int.MAX_VALUE
+                if (sourceDistance + 1 < (paths[it.name] ?: Int.MAX_VALUE)) {
+                    paths[it.name] = sourceDistance + 1
+                }
+                unsettled.add(it.name)
+            }
+        }
+        settled.add(evaluation)
+        unsettled = ArrayDeque(unsettled.distinct().sortedBy { paths[it] })
+    }
+    return paths
 }
