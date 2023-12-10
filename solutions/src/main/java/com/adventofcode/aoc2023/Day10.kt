@@ -29,7 +29,7 @@ class Day10 : Solution() {
 
     private fun List<String>.pipes() : List<Pair<Char, Node>> {
         return this.flatMapIndexed { y, row ->
-            row.mapIndexed { x, pipe ->
+            row.mapIndexedNotNull { x, pipe ->
                 val point = Point(x, y)
                 val neighbours = connections.mapIndexedNotNull { idx, (vector, _) ->
                     if (hasValidConnection(point, idx, this)) point.move(vector).name() else null
