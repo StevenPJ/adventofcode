@@ -2,6 +2,7 @@ package com.adventofcode.aoc2023
 
 import com.adventofcode.util.nonEmptyLines
 import com.adventofcode.util.splitIgnoreEmpty
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sqrt
@@ -13,7 +14,7 @@ class Dimensions(private val width: Int, private val height: Int) {
             input.size)
 
     fun contains(p: Point): Boolean {
-        return p.x >= 0 && p.x <= this.width && p.y <= this.height && p.y >= 0
+        return p.x >= 0 && p.x < this.width && p.y < this.height && p.y >= 0
     }
 }
 
@@ -32,8 +33,16 @@ data class Point(val x: Int, val y: Int) {
         ).filter { dimensions.contains(it) }
     }
 
+    fun name(): String {
+        return String.format("(%d,%d)", x, y)
+    }
+
     fun left(): Point {
         return Point(this.x - 1, this.y)
+    }
+
+    fun move(vector: Point): Point {
+        return Point(x + vector.x, y + vector.y)
     }
 }
 
@@ -115,7 +124,7 @@ fun String.splitBlocks(): List<String> = this.splitIgnoreEmpty("\n\n")
 
 fun range(start: Long, length: Long): LongRange = start until start + length
 
-data class Node(val name: String, private val neighbours: List<String>) {
+data class Node(val name: String, val neighbours: List<String>) {
     fun left(nodes: List<Node>): Node = nodes.find { it.name == this.neighbours.first() }!!
     fun right(nodes: List<Node>): Node = nodes.find { it.name == this.neighbours.last() }!!
     fun neighbours(nodes: List<Node>): List<Node> = neighbours.map { n -> nodes.find { it.name == n }!! }
@@ -148,4 +157,36 @@ fun List<Node>.shortestPath(source: String): Map<String, Int> {
         unsettled = ArrayDeque(unsettled.distinct().sortedBy { paths[it] })
     }
     return paths
+}
+
+fun List<Node>.dfs(source: String, discovered: MutableList<Node> = mutableListOf()) : List<Node> {
+    val node = this.find { it.name == source }!!
+    discovered.add(node)
+    node.neighbours(this).forEach {
+        if (!discovered.contains(it))
+            this.dfs(it.name, discovered)
+    }
+    return discovered
+}
+
+fun Node.point(): Point {
+    val (x, y) = this.name.match("\\((-?\\d+),(-?\\d+)\\)".toRegex())!!
+    return Point(x.toInt(), y.toInt())
+}
+
+fun Node.x(): Int {
+    return this.point().x
+}
+
+fun Node.y(): Int {
+    return this.point().y
+}
+
+fun List<Node>.shoelaceArea(): Double {
+    val n = this.size
+    var area = 0.0
+    (0 until n - 1).forEach{
+        area += this[it].x() * this[it + 1].y() - this[it + 1].x() * this[it].y()
+    }
+    return abs(area + this[n - 1].x() * this[0].y() - this[0].x() * this[n - 1].y()) / 2.0
 }
