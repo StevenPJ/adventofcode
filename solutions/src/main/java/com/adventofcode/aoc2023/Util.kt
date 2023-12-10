@@ -164,9 +164,26 @@ fun List<Node>.dfs(source: String, discovered: MutableList<Node> = mutableListOf
     discovered.add(node)
     node.neighbours(this).forEach {
         if (!discovered.contains(it))
-            this.dfs(it.name, discovered)
+            return this.dfs(it.name, discovered)
     }
     return discovered
+}
+
+fun List<Node>.bfs(source: String): List<Node> {
+    val node = this.find { it.name == source }!!
+    val queue = mutableListOf(node)
+    val visited = mutableListOf(node)
+
+    while(queue.isNotEmpty()) {
+        val current = queue.removeAt(0)
+        current.neighbours(this).forEach {
+            if (!visited.contains(it)) {
+                visited.add(it)
+                queue.add(it)
+            }
+        }
+    }
+    return visited
 }
 
 fun Node.point(): Point {
