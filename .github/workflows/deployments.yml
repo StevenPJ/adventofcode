@@ -26,7 +26,7 @@ jobs:
           ./gradlew build shadowJar --build-cache
           sed -i '/Solutions.*/q' README.md
           echo '```' >> README.md
-          java -Xss10m -jar -DINPUT_DIR="$(realpath inputs)" solutions/build/libs/solutions-1.0-SNAPSHOT-all.jar 2023 >> README.md
+          java -Xmx2g -jar -DINPUT_DIR="$(realpath inputs)" solutions/build/libs/solutions-1.0-SNAPSHOT-all.jar 2023 >> README.md
           echo '```' >> README.md
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
