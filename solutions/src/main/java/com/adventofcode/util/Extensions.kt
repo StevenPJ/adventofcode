@@ -38,6 +38,21 @@ fun <T> List<T>.eachPermutationChooseK(size: Int): Sequence<List<T>> =
         }
     }
 
+fun <T> List<T>.eachUnorderedPermutationChooseK(size: Int): Sequence<List<T>> =
+        if (this.isEmpty() || size == 0) {
+            sequenceOf(emptyList())
+        } else {
+            val list = this
+            sequence {
+                list.forEach { item: T ->
+                    (list.subList(list.indexOf(item) + 1, list.size)).eachPermutationChooseK(size - 1).forEach {items: List<T> ->
+                        if (items.isNotEmpty() && item != null)
+                            yield(items + item)
+                    }
+                }
+            }
+        }
+
 fun <T> List<T>.eachCombinationsChooseK(size: Int): Sequence<List<T>> =
         if (this.isEmpty() || size == 0) {
             sequenceOf(emptyList())

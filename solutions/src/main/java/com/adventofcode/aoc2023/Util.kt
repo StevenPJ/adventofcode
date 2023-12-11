@@ -7,7 +7,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sqrt
 
-class Dimensions(private val width: Int, private val height: Int) {
+class Dimensions(val width: Int, val height: Int) {
 
     constructor(input: List<String>)  : this(
             input.first().length,
@@ -206,4 +206,8 @@ fun List<Node>.shoelaceArea(): Double {
         area += this[it].x() * this[it + 1].y() - this[it + 1].x() * this[it].y()
     }
     return abs(area + this[n - 1].x() * this[0].y() - this[0].x() * this[n - 1].y()) / 2.0
+}
+
+fun Point.distance(other: Point): Int {
+    return abs(other.x - this.x) + abs(other.y - this.y)
 }
