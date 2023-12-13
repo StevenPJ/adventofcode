@@ -2,6 +2,8 @@ package com.adventofcode.aoc2023
 
 import com.adventofcode.util.nonEmptyLines
 import com.adventofcode.util.splitIgnoreEmpty
+import java.util.*
+import kotlin.collections.ArrayDeque
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -210,4 +212,14 @@ fun List<Node>.shoelaceArea(): Double {
 
 fun Point.distance(other: Point): Int {
     return abs(other.x - this.x) + abs(other.y - this.y)
+}
+
+fun <T>List<List<T>>.transpose(): List<List<T>> {
+    return (this[0].indices).map { i -> (this.indices).map { j -> this[j][i] } }
+}
+
+fun <T> List<T>.rotate(n: Int): List<T> {
+    val rotated = this.toMutableList()
+    Collections.rotate(rotated, n)
+    return rotated
 }
