@@ -5,13 +5,13 @@
 # pip3 install advent-of-code-data
 
 for i in $(seq 31 $END); do
-  FILE="inputs/2023/day$i.txt"
+  FILE="inputs/2024/day$i.txt"
   if test -f "$FILE"; then
       continue
   fi
   currentDay=$(date +'%_d')
   if [ "$i" -le "$currentDay" ]; then
-     aocd $i 2023 > $FILE
+     aocd $i 2024 > $FILE
   fi
 done
 

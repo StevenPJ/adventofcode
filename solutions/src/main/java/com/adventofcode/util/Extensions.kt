@@ -60,7 +60,7 @@ fun <T> List<T>.eachCombinationsChooseK(size: Int): Sequence<List<T>> =
             val list = this
             sequence {
                 list.forEach { item ->
-                    (list).eachPermutationChooseK(size - 1).forEach {
+                    (list).eachCombinationsChooseK(size - 1).forEach {
                         yield(it + item)
                     }
                 }

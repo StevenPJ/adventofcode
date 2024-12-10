@@ -9,6 +9,11 @@ repositories {
     mavenCentral()
 }
 
+java {
+    targetCompatibility = 17
+    sourceCompatibility = 17
+}
+
 dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
